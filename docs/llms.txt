@@ -48,6 +48,10 @@ IssueCode: the closed set of 21 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.
+allocate: the lowest free number of a class given what is taken and reserved; stores nothing.
+number_group: levels for several codes, each numbered after the earlier ones; taken is not changed.
+natural_key: a sort key with digit runs by value, numbers before text, ties on the raw text.
+sort_key: a designation's key, one pair per level; the aspect order is a required keyword.
 Memory: the memory area of a direct PLC address (refdef.plc): input, output or marker; the value is the letter.
 Size: the access size of a direct PLC address (refdef.plc): none, bit, byte, word, double word or long word.
 Address: a direct PLC address printed %IX0.0, %QW4 or %I* (refdef.plc); as_bit() adds the bit size to a size-less dotted address.
