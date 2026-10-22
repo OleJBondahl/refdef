@@ -20,13 +20,18 @@ from refdef.plc import Address, Memory, Size
 print(Address(Memory.MARKER, Size.WORD, (12,)))  # %MW12
 ```
 
-Text that is not an address gives no value and a `NOT_ADDRESS` issue; there is no lenient repair.
+Text that is not an address gives no value and a `NOT_ADDRESS` issue. Outer whitespace and leading
+zeros are repaired, each with an issue that names the repaired text: the whole text for the
+whitespace, and one issue per path element for the zeros.
 
 ```python
 from refdef.plc import parse_address
 result = parse_address("%Z9")
 print(result.value)                             # None
 print(result.issues[0].code.name)               # NOT_ADDRESS
+result = parse_address(" %IX00.2.010 ")
+print(result.value)                             # %IX0.2.10
+print([(i.code.name, i.subject) for i in result.issues])  # [('WHITESPACE', ' %IX00.2.010 '), ('LEADING_ZERO', '00'), ('LEADING_ZERO', '010')]
 ```
 
 A channel tag such as `-KE1:DI03` is a `Terminal`. A `ChannelTag` pairs it with an optional

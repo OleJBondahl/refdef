@@ -59,3 +59,27 @@ def test_a_wrong_comment_is_found():
     found = page_mismatches(text)
     assert len(found) == 1
     assert "comment '3'" in found[0]
+
+
+def uncommented(source: str, name: str = "block") -> list[str]:
+    """The print statements of `source` that end on a line with no comment."""
+    comments = _comments(source)
+    return [
+        f"{name}:{node.lineno}"
+        for node in ast.parse(source).body
+        if _is_print(node) and (node.end_lineno or node.lineno) not in comments
+    ]
+
+
+def test_every_guide_print_has_a_comment():
+    """M16: a print with no comment would pass unchecked, so none is allowed."""
+    bad = []
+    for page in sorted((ROOT / "docs" / "guide").glob("*.md")):
+        for number, block in enumerate(FENCE.findall(page.read_text(encoding="utf-8")), 1):
+            bad += uncommented(block, f"{page.name} block {number}")
+    assert not bad, "\n".join(bad)
+
+
+def test_an_uncommented_print_is_found():
+    """M16: the completeness check can fail."""
+    assert uncommented("print(1)  # 1\nprint(2)\n") == ["block:2"]

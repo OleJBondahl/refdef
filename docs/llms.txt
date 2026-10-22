@@ -32,7 +32,7 @@ R3. `str()` prints every level with its sign and never pads, dots or drops a sig
 R4. `parse` and `parse_address` return a value and an issue tuple for any string, every lenient repair (case, leading zero, dot, missing sign, free label, unsupported suffix) is matched by an issue with its code, and no default letter or number is ever substituted; a digit run that is zero or longer than nine digits (the bound of R2) reads as a label with an issue.
 R5. `parse` takes no scheme, every rule that needs one (aspect on, letter count, never-letters, unknown class by `code[:depth]`, duplicate) lives in `check`, and no function reads a scheme or table other than through its argument.
 R6. `Issue` has exactly these three fields, no severity, and `IssueCode` is a closed enum of exactly 21 codes that every emitted issue uses: the parse family (16) `EMPTY`, `NO_SIGN`, `EMPTY_LEVEL`, `EMPTY_TOP`, `WHITESPACE`, `LOWER_CASE`, `LEADING_ZERO`, `ZERO_NUMBER`, `NUMBER_TOO_LARGE`, `FREE_LABEL`, `BAD_LABEL`, `DOT_LEVEL`, `EMPTY_PIN`, `EMPTY_NAME`, `UNSUPPORTED_SUFFIX`, `NOT_ADDRESS` (the last only from `parse_address`), and the check family (5) `ASPECT_OFF`, `LETTER_COUNT`, `NEVER_LETTER`, `UNKNOWN_CLASS`, `DUPLICATE`; the values are the lower-case names.
-R7. `within`, `relative_to` (on `Designation`, `Terminal` and `Signal`) and `common` follow the rule in `DESIGN.md` exactly, and `common(*ds)` is within every argument.
+R7. `within`, `relative_to` (on `Designation`, `Terminal` and `Signal`) and `common` follow the rule in `DESIGN.md` exactly, and every argument is within `common(*ds)`.
 R8. `allocate` returns the lowest free number from `first` given `taken` and `reserved`, `number_group` equals `allocate` applied in sequence with each result added to `taken`, and refdef holds no numbering store.
 R9. `natural_key` orders digit runs by value and text runs as text, numbers before text, with the raw text as the last tie-break; `sort_key` is one `(aspect rank, natural_key(level.text))` pair per level, with the aspect order a required keyword and an unlisted aspect ranked after the listed ones in enum order.
 R10. `ClassTable.version` is refdef's own line, bumps whenever the entry tuple changes, and the changelog names each moved code.
@@ -56,7 +56,7 @@ Memory: the memory area of a direct PLC address (refdef.plc): input, output or m
 Size: the access size of a direct PLC address (refdef.plc): none, bit, byte, word, double word or long word.
 Address: a direct PLC address printed %IX0.0, %QW4 or %I* (refdef.plc); as_bit() adds the bit size to a size-less dotted address.
 ChannelTag: a terminal with an optional address (refdef.plc), printed as the terminal alone.
-parse_address: reads a direct PLC address (refdef.plc); text that is not one gives None and a NOT_ADDRESS issue.
+parse_address: reads a direct PLC address (refdef.plc), repairing outer whitespace and leading zeros with an issue each; text that is not one gives None and a NOT_ADDRESS issue.
 Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes and aspects.
 ClassEntry: one class code with its title, the typical device of the class.
 STANDARD: the shipped scheme (function, product and location on, one to three letters without I and O, the versioned standard class table).
