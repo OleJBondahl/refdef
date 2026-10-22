@@ -33,6 +33,11 @@ class Terminal(of: 'Designation', pins: 'tuple[str, ...]') -> 'None'
 
     At least one pin; each is stripped, non-empty and without `:`. Pins are opaque text.
 
+parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal]'
+    Read text as a designation, terminal or signal, with an issue for each repair.
+
+    `bare` is the aspect of text before the first sign. Never raises for content.
+
 render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False) -> 'str'
     Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
 

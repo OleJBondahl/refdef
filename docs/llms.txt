@@ -46,4 +46,5 @@ Signal: a name on a designation or alone, printed of;name; the name is opaque te
 Issue: a code, the offending text and a short message; no severity.
 IssueCode: the closed set of 21 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
+parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.

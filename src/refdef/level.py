@@ -34,7 +34,8 @@ def coded_split(body: str) -> tuple[str, str] | None:
     if hit is None:
         return None
     letters, digits = hit.groups()
-    if len(digits.lstrip("0")) > len(str(MAX_NUMBER)) or not 1 <= int(digits) <= MAX_NUMBER:
+    significant = digits.lstrip("0")  # int() of a 4300-digit run of zeros raises ValueError
+    if len(significant) > len(str(MAX_NUMBER)) or not 1 <= int(significant or "0") <= MAX_NUMBER:
         return None
     return letters, digits
 
