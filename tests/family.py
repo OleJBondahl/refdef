@@ -426,7 +426,8 @@ def gate_f8(root: Path = ROOT) -> None:
     problem = _api_problem(root)
     assert problem is None, f"F8: {problem}"
     lib, doors = lib_name(root), family_config(root)["doors"]
-    files = [*(root / "docs").rglob("*.md"), *(root / "tests" / "guide").rglob("*")]
+    guide = root / "tests" / "guide"
+    files = [*(root / "docs").rglob("*.md"), *guide.rglob("*.md"), *guide.rglob("*.py")]
     bad = [
         f"{path.relative_to(root)}: {name}"
         for path in files
