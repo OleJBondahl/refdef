@@ -131,6 +131,8 @@ _CORPUS = Path(__file__).resolve().parent / "corpus"
 _SPEC = importlib.util.spec_from_file_location(
     "gen_render_corpus", Path(__file__).resolve().parent.parent / "scripts" / "gen_render_corpus.py"
 )
+assert _SPEC is not None
+assert _SPEC.loader is not None
 _GEN = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_GEN)
 

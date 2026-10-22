@@ -2,6 +2,7 @@
 
 import inspect
 import random
+from typing import Any, cast
 
 import fuzz
 import pytest
@@ -92,22 +93,22 @@ def test_value_types():
 
 def test_signal_of():
     """R4: a signal with no levels and no top has `of=None`; with a designation it keeps it."""
-    assert parse(";SIG", bare=P).value.of is None
-    assert parse("-K1;SIG", bare=P).value.of == parse("-K1", bare=P).value
-    assert parse("<Plant>;SIG", bare=P).value.of == Designation(top="Plant")
+    assert cast("Any", parse(";SIG", bare=P).value).of is None
+    assert cast("Any", parse("-K1;SIG", bare=P).value).of == parse("-K1", bare=P).value
+    assert cast("Any", parse("<Plant>;SIG", bare=P).value).of == Designation(top="Plant")
 
 
 def test_terminal_pins():
     """R4: pins are split on a colon and kept in order."""
-    assert parse("-K1:A:B", bare=P).value.pins == ("A", "B")
+    assert cast("Any", parse("-K1:A:B", bare=P).value).pins == ("A", "B")
 
 
 def test_longest_sign():
     """R4: `==` and `++` win over `=` and `+`; they read as one level each."""
-    assert len(parse("==A1", bare=P).value.levels) == 1
-    assert len(parse("++S1", bare=P).value.levels) == 1
-    assert parse("==A1", bare=P).value.levels[0].aspect is Aspect.ASSIGNMENT
-    assert parse("++S1", bare=P).value.levels[0].aspect is Aspect.SITE
+    assert len(cast("Any", parse("==A1", bare=P).value).levels) == 1
+    assert len(cast("Any", parse("++S1", bare=P).value).levels) == 1
+    assert cast("Any", parse("==A1", bare=P).value).levels[0].aspect is Aspect.ASSIGNMENT
+    assert cast("Any", parse("++S1", bare=P).value).levels[0].aspect is Aspect.SITE
 
 
 def test_signature():
@@ -136,7 +137,7 @@ def test_non_aspect_bare_raises(bare):
 def test_bare_positional_raises():
     """R5: `bare` is keyword-only, so passing it positionally is a TypeError."""
     with pytest.raises(TypeError):
-        parse("-K1", P)
+        parse("-K1", P)  # ty: ignore[too-many-positional-arguments, missing-argument] - passed positionally on purpose
 
 
 @pytest.mark.parametrize("bare", list(Aspect))

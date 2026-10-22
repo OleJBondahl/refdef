@@ -1,5 +1,7 @@
 """Sketch cases S01, S02, S18, S23-S25, S28-S33, S34-S40 on the real library, one function each."""
 
+from typing import Any, cast
+
 import pytest
 
 from refdef import Aspect, Designation, Level, Signal, Terminal, parse, render
@@ -21,7 +23,7 @@ def test_s02_letters_only_code_refused():
 def test_s18_two_levels_with_free_label_and_leading_zero():
     """R4: `=CS-CV01` gives two levels, issues free_label and leading_zero, prints `=CS-CV1`."""
     result = parse("=CS-CV01", bare=P)
-    assert len(result.value.levels) == 2
+    assert len(cast("Any", result.value).levels) == 2
     assert [issue.code.value for issue in result.issues] == ["free_label", "leading_zero"]
     assert str(result.value) == "=CS-CV1"
 
@@ -35,13 +37,13 @@ def test_s23_channel_text_is_terminal_with_pin():
 
 def test_s24_label_case_kept():
     """R2: `-Psu_main` keeps the label case, so the first level's label is `Psu_main`."""
-    assert parse("-Psu_main", bare=P).value.levels[0].label == "Psu_main"
+    assert cast("Any", parse("-Psu_main", bare=P).value).levels[0].label == "Psu_main"
 
 
 def test_s25_lower_case_code_upper_cased_with_issue():
     """R4: `-k1` gives the code K and the single issue lower_case."""
     result = parse("-k1", bare=P)
-    assert result.value.levels[0].code == "K"
+    assert cast("Any", result.value).levels[0].code == "K"
     assert [issue.code.value for issue in result.issues] == ["lower_case"]
 
 
@@ -54,13 +56,13 @@ def test_s28_empty_text_gives_empty_issue_and_empty_designation():
 
 def test_s29_pins_keep_any_text_but_colon():
     """R2: a pin may hold a trailing `-` or inner spaces: `OUT1-` and `A A 9` are whole pins."""
-    assert parse("-X1:OUT1-", bare=P).value.pins == ("OUT1-",)
-    assert parse("-K1:A A 9", bare=P).value.pins == ("A A 9",)
+    assert cast("Any", parse("-X1:OUT1-", bare=P).value).pins == ("OUT1-",)
+    assert cast("Any", parse("-K1:A A 9", bare=P).value).pins == ("A A 9",)
 
 
 def test_s30_pad_option_zero_fills_number():
     """R3: `render(..., pad={"W": 4})` zero-fills the number of `-W1` to `-W0001`."""
-    assert render(parse("-W1", bare=P).value, pad={"W": 4}) == "-W0001"
+    assert render(cast("Designation", parse("-W1", bare=P).value), pad={"W": 4}) == "-W0001"
 
 
 def test_s31_top_node_prints_with_angle_brackets():
