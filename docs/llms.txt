@@ -48,3 +48,8 @@ IssueCode: the closed set of 21 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.
+Memory: the memory area of a direct PLC address (refdef.plc): input, output or marker; the value is the letter.
+Size: the access size of a direct PLC address (refdef.plc): none, bit, byte, word, double word or long word.
+Address: a direct PLC address printed %IX0.0, %QW4 or %I* (refdef.plc); as_bit() adds the bit size to a size-less dotted address.
+ChannelTag: a terminal with an optional address (refdef.plc), printed as the terminal alone.
+parse_address: reads a direct PLC address (refdef.plc); text that is not one gives None and a NOT_ADDRESS issue.

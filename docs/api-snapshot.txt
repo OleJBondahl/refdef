@@ -42,3 +42,21 @@ render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Col
     Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
 
     `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+
+## refdef.plc
+class Address(memory: 'Memory', size: 'Size', path: 'tuple[int, ...]') -> 'None'
+    A direct address printed `%` memory size path; an empty path is the incomplete `%I*`.
+
+    A path index is an int from 0 to 999_999_999; any other shape raises TypeError.
+
+class ChannelTag(terminal: 'Terminal', address: 'Address | None' = None) -> 'None'
+    A terminal with an optional address, printed as the terminal alone (`-KE1:DI03`).
+
+class Memory
+    The memory area of an address: input, output or marker; the value is the letter.
+
+class Size
+    The access size of an address: none, bit, byte, word, double word or long word.
+
+parse_address(text: 'str') -> 'Parsed[Address | None]'
+    Read a direct address; text that is not one gives `None` and a NOT_ADDRESS issue.
