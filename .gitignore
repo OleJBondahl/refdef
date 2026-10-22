@@ -9,3 +9,4 @@ dist/
 .site-src/
 .site/
 .refdef/
+.cache/
