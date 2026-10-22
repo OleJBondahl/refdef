@@ -26,6 +26,7 @@ TABLE = [
     ("<>-K1", P, "-K1", ("empty_top",)),
     ("< Plant A >-K1", P, "<Plant A>-K1", ("whitespace",)),
     ("- K1", P, "-K1", ("whitespace",)),
+    ("<T> -K1", P, "<T>-K1", ("whitespace",)),
     ("-k1", P, "-K1", ("lower_case",)),
     ("-K01", P, "-K1", ("leading_zero",)),
     ("-k01", P, "-K1", ("leading_zero", "lower_case")),
