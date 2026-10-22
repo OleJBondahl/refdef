@@ -1,0 +1,40 @@
+refdef: a pure Python library of reference designations (the tags that name things in a plant) for electrical engineers.
+Site: https://olejbondahl.github.io/refdef/
+Index: https://olejbondahl.github.io/refdef/
+Guide: https://olejbondahl.github.io/refdef/guide/
+API: https://olejbondahl.github.io/refdef/api/
+Design: https://olejbondahl.github.io/refdef/design/
+Rules: https://olejbondahl.github.io/refdef/rules/
+Changelog: https://olejbondahl.github.io/refdef/changelog/
+Command: python -m refdef api
+Rule: a change follows RULES.md.
+Rules:
+F1. The library declares no runtime dependency and imports only the standard library and itself; libraries of the family never import each other.
+F2. Every value is a frozen dataclass or an enum; the library performs no file, network, clock or random access.
+F3. Validation returns issues as values and never raises for content; only a malformed call (a wrong type, a wrong kind of argument, or a shape the library's RULES.md names as malformed) raises TypeError.
+F4. A closed vocabulary is an enum or a typed constant, never a string.
+F5. A fact has one home across the family: symdef draws, refdef says what a thing is, refdef says what it is called, a consumer connects and lays out.
+F6. A caller's convention (a padding, an ordering, a default, a project class) arrives as an argument or a value; no general function carries a caller's default.
+F7. No paid standard is cited and no standard's wording is used; open sources are used only with the credit block in README.md.
+F8. The public surface is the names in __all__ of the top level and of each door, read by python -m <library> api, and it changes only with the snapshot.
+F9. Every surface name has a docstring and a runnable example on the docs site.
+F10. Code stays lean: a function has at most 15 statements, complexity 8 and 12 branches, no def inside a def; a module has at most 300 code lines; a docstring is one summary line plus at most two lines of why.
+F11. Versions are semantic and every surface change carries a changelog line.
+F12. A pull request that edits DESIGN.md or RULES.md, or changes docs/api-snapshot.txt, or changes a shipped table under src/<library>/tables/, carries a Design-review: trailer naming an approved review.
+F13. A consumer's missing need is met by a reviewed surface extension, never by a workaround in the consumer, a private import, a copy of the rule or a consumer-specific default in the library.
+F14. The library is MIT licensed, and the licence covers its code and its shipped tables.
+F15. One public spelling per task: a second way to build, read or print the same value is not added, and no operator is overloaded to build a value; arithmetic belongs only to the numeric value types the library's RULES.md names.
+F16. An agent finds everything from one place: AGENTS.md in the repository and llms.txt at the docs site root name the docs site, the surface command (python -m <library> api), the guide, DESIGN.md and RULES.md, and say that a change follows RULES.md.
+F17. The library stands alone: no file in the repository names an application that uses it.
+R1. For every designation, terminal or signal value `v`, `parse(str(v), bare=a).value == v` for any aspect `a`, and for every string `s` that parses without an issue, `str(parse(s, bare=a).value) == s`.
+R2. A `Level` has upper-case letters with a number, a number alone, or a stripped non-empty label without `= - + % # : ; & < > .`; a number is an `int` from 1 to 999_999_999; a label is never shaped like a code (ASCII letters, then digits worth 1 to 999_999_999, such as `K1`, `k01` or `7`), because `-K1` must read back as a coded level (`K0` and `K1234567890` are labels); a `Designation.top` is empty or stripped, non-empty and without `> : ; &`; a `Terminal` has at least one pin, each stripped, non-empty and without `:`; a `Signal.name` is stripped and non-empty, and a `Signal.of` is `None` or a designation with at least one level or a top (an empty `Signal.of` is refused, because `;N` must read back to the same value); any other shape is malformed and raises `TypeError` at construction (F3).
+R3. `str()` prints every level with its sign and never pads, dots or drops a sign; every dialect (`pad`, `dotted`, `bare`) is an explicit `render` option, and a change to any printed form moves the golden.
+R4. `parse` and `parse_address` return a value and an issue tuple for any string, every lenient repair (case, leading zero, dot, missing sign, free label, unsupported suffix) is matched by an issue with its code, and no default letter or number is ever substituted; a digit run that is zero or longer than nine digits (the bound of R2) reads as a label with an issue.
+R5. `parse` takes no scheme, every rule that needs one (aspect on, letter count, never-letters, unknown class by `code[:depth]`, duplicate) lives in `check`, and no function reads a scheme or table other than through its argument.
+R6. `Issue` has exactly these three fields, no severity, and `IssueCode` is a closed enum of exactly 21 codes that every emitted issue uses: the parse family (16) `EMPTY`, `NO_SIGN`, `EMPTY_LEVEL`, `EMPTY_TOP`, `WHITESPACE`, `LOWER_CASE`, `LEADING_ZERO`, `ZERO_NUMBER`, `NUMBER_TOO_LARGE`, `FREE_LABEL`, `BAD_LABEL`, `DOT_LEVEL`, `EMPTY_PIN`, `EMPTY_NAME`, `UNSUPPORTED_SUFFIX`, `NOT_ADDRESS` (the last only from `parse_address`), and the check family (5) `ASPECT_OFF`, `LETTER_COUNT`, `NEVER_LETTER`, `UNKNOWN_CLASS`, `DUPLICATE`; the values are the lower-case names.
+R7. `within`, `relative_to` (on `Designation`, `Terminal` and `Signal`) and `common` follow the rule in `DESIGN.md` exactly, and `common(*ds)` is within every argument.
+R8. `allocate` returns the lowest free number from `first` given `taken` and `reserved`, `number_group` equals `allocate` applied in sequence with each result added to `taken`, and refdef holds no numbering store.
+R9. `natural_key` orders digit runs by value and text runs as text, numbers before text, with the raw text as the last tie-break; `sort_key` is one `(aspect rank, natural_key(level.text))` pair per level, with the aspect order a required keyword and an unlisted aspect ranked after the listed ones in enum order.
+R10. `ClassTable.version` is refdef's own line, bumps whenever the entry tuple changes, and the changelog names each moved code.
+R11. `refdef.plc` holds only the direct-address form (`%` + memory area + optional size + dotted path, `*` for incomplete), with `as_bit` the one normalisation, and every vendor dialect is its own module behind its own type.
+R12. refdef never reads inside a pin or a signal name: the only operations on them are the `:` split in `parse`, the `:` join in `render` and `natural_key`.

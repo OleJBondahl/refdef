@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.superpowers/
+claude-tools/
+dist/
+.site-src/
+.site/
+.refdef/

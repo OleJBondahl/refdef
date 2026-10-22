@@ -1,0 +1,35 @@
+# The docs site config. Zensical and Material for MkDocs both read it.
+# `scripts/build_site.py` stages the pages into .site-src/pages/ beside it.
+site_name: refdef
+site_url: https://olejbondahl.github.io/refdef/
+repo_url: https://github.com/OleJBondahl/refdef
+docs_dir: .site-src/pages
+site_dir: .site
+use_directory_urls: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
