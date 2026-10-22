@@ -7,6 +7,7 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 - Add `Aspect`, `Level`, `Designation`, `Terminal`, `Signal`, `Issue`, `IssueCode`, `Parsed` and `render`.
 - Add `parse`.
+- Add `allocate`, `number_group`, `natural_key` and `sort_key`.
 
 ## 0.1.0 (2026-10-22)
 

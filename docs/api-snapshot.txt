@@ -33,6 +33,17 @@ class Terminal(of: 'Designation', pins: 'tuple[str, ...]') -> 'None'
 
     At least one pin; each is stripped, non-empty and without `:`. Pins are opaque text.
 
+allocate(aspect: 'Aspect', code: 'str', taken: 'Collection[Level]', reserved: 'Collection[Level]' = (), *, first: 'int' = 1) -> 'int'
+    The smallest number from `first` for which `Level(aspect, code, n)` is in neither collection.
+
+    `first` below 1 is a TypeError. Nothing is stored: the caller passes what is taken.
+
+natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+    A sort key: digit runs by value, text runs as text, numbers first, then the raw text.
+
+number_group(aspect: 'Aspect', codes: 'Sequence[str]', taken: 'Collection[Level]' = (), reserved: 'Collection[Level]' = ()) -> 'tuple[Level, ...]'
+    One level per code, each numbered after the earlier ones; `taken` is not changed.
+
 parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal]'
     Read text as a designation, terminal or signal, with an issue for each repair.
 
@@ -42,3 +53,8 @@ render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Col
     Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
 
     `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+
+sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+    A sort key: per level the rank of its aspect in `aspects` and its natural key.
+
+    Aspects not listed rank after the listed ones, in enum order. The top is not in the key.
