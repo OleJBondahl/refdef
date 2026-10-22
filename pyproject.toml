@@ -141,10 +141,25 @@ ignore_names = [
     "child",
     "parent",
     "last",
+    "INPUT",
+    "OUTPUT",
+    "MARKER",
+    "NONE",
+    "BIT",
+    "BYTE",
+    "WORD",
+    "DWORD",
+    "LWORD",
+    "as_bit",
+    "parse_address",
+    "ChannelTag",
+    "version",
+    "extend",
+    "ENTRIES_SHA256",
 ]
 
 [tool.family]
-doors = ["refdef"]
+doors = ["refdef", "refdef.plc"]
 str_allowlist = ["code", "label", "top", "pins", "name", "title", "version", "subject", "message"]
 boundary_names = ["rating", "voltage", "svg", "x", "y", "page", "marking", "role", "kind", "potential"]
 numeric_classes = []

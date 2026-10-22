@@ -48,3 +48,16 @@ IssueCode: the closed set of 21 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.
+allocate: the lowest free number of a class given what is taken and reserved; stores nothing.
+number_group: levels for several codes, each numbered after the earlier ones; taken is not changed.
+natural_key: a sort key with digit runs by value, numbers before text, ties on the raw text.
+sort_key: a designation's key, one pair per level; the aspect order is a required keyword.
+Memory: the memory area of a direct PLC address (refdef.plc): input, output or marker; the value is the letter.
+Size: the access size of a direct PLC address (refdef.plc): none, bit, byte, word, double word or long word.
+Address: a direct PLC address printed %IX0.0, %QW4 or %I* (refdef.plc); as_bit() adds the bit size to a size-less dotted address.
+ChannelTag: a terminal with an optional address (refdef.plc), printed as the terminal alone.
+parse_address: reads a direct PLC address (refdef.plc); text that is not one gives None and a NOT_ADDRESS issue.
+Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes and aspects.
+ClassEntry: one class code with its title, the typical device of the class.
+STANDARD: the shipped scheme (function, product and location on, one to three letters without I and O, the versioned standard class table).
+check: tests designations against a scheme and returns an issue for each finding, in order; it reads nothing but its scheme argument.
