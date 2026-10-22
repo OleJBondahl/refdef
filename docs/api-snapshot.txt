@@ -1,1 +1,39 @@
 ## refdef
+class Aspect
+    The tree a level belongs to; the value is its sign.
+
+    The first three are on in the shipped scheme; declaration order is the rank tie-break.
+
+class Designation(levels: 'tuple[Level, ...]' = (), top: 'str' = '') -> 'None'
+    A tuple of levels and an optional top node, built by the constructor and `child` only.
+
+    Join two through their levels; the empty designation is the root.
+
+class Issue(code: 'IssueCode', subject: 'str', message: 'str') -> 'None'
+    One finding about a string or a designation: a code, the offending text, a short sentence.
+
+class IssueCode
+    The 21 issue codes: the first 16 come from the readers, the last 5 from check.
+
+class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, label: 'str' = '') -> 'None'
+    One step in a tree: letters and a number (`-K2`), a number alone (`+3`) or a label (`+ER`).
+
+    Letters are upper case and need a number; a label is never code-shaped. Else TypeError.
+
+class Parsed(value: 'T', issues: 'tuple[Issue, ...]') -> 'None'
+    A value read from text together with the issues the reader found.
+
+class Signal(of: 'Designation | None', name: 'str') -> 'None'
+    A signal name on a designation, printed `of;name`; `of` is None for a bare name.
+
+    The name is stripped and non-empty and may hold `: ; &`. It is opaque text.
+
+class Terminal(of: 'Designation', pins: 'tuple[str, ...]') -> 'None'
+    A designation and the pins on it, printed `of:pin:pin`.
+
+    At least one pin; each is stripped, non-empty and without `:`. Pins are opaque text.
+
+render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False) -> 'str'
+    Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
+
+    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.

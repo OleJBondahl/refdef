@@ -5,6 +5,8 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- Add `Aspect`, `Level`, `Designation`, `Terminal`, `Signal`, `Issue`, `IssueCode`, `Parsed` and `render`.
+
 ## 0.1.0 (2026-10-22)
 
 - Empty package scaffold with the family rule gates.

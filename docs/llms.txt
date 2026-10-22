@@ -38,3 +38,12 @@ R9. `natural_key` orders digit runs by value and text runs as text, numbers befo
 R10. `ClassTable.version` is refdef's own line, bumps whenever the entry tuple changes, and the changelog names each moved code.
 R11. `refdef.plc` holds only the direct-address form (`%` + memory area + optional size + dotted path, `*` for incomplete), with `as_bit` the one normalisation, and every vendor dialect is its own module behind its own type.
 R12. refdef never reads inside a pin or a signal name: the only operations on them are the `:` split in `parse`, the `:` join in `render` and `natural_key`.
+Aspect: enum of the seven signs (= - + % # == ++); the value is the sign.
+Level: one step in a tree (letters and a number, a number alone, or a label); a malformed shape raises TypeError.
+Designation: frozen tuple of levels and an optional top; built by the constructor and child(), no operator.
+Terminal: a designation and its pins, printed of:pin:pin; pins are opaque text.
+Signal: a name on a designation or alone, printed of;name; the name is opaque text.
+Issue: a code, the offending text and a short message; no severity.
+IssueCode: the closed set of 21 issue codes; values are the lower-case names.
+Parsed: a value read from text together with its issues.
+render: the strict printer with the explicit options pad, dotted and bare.

@@ -103,7 +103,45 @@ max-complexity = 8
 "scripts/**" = ["T20"]
 
 [tool.vulture]
-ignore_names = []
+# Enum members and public data-model attributes that only callers and the tests use, so vulture,
+# which scans src alone, sees no use. Names match globally: add one only when it is a member of
+# the public data model (designer ruling, 2026-10-22).
+ignore_names = [
+    "FUNCTION",
+    "PRODUCT",
+    "LOCATION",
+    "TYPE",
+    "OTHER",
+    "ASSIGNMENT",
+    "SITE",
+    "EMPTY",
+    "NO_SIGN",
+    "EMPTY_LEVEL",
+    "EMPTY_TOP",
+    "WHITESPACE",
+    "LOWER_CASE",
+    "LEADING_ZERO",
+    "ZERO_NUMBER",
+    "NUMBER_TOO_LARGE",
+    "FREE_LABEL",
+    "BAD_LABEL",
+    "DOT_LEVEL",
+    "EMPTY_PIN",
+    "EMPTY_NAME",
+    "UNSUPPORTED_SUFFIX",
+    "NOT_ADDRESS",
+    "ASPECT_OFF",
+    "LETTER_COUNT",
+    "NEVER_LETTER",
+    "UNKNOWN_CLASS",
+    "DUPLICATE",
+    "subject",
+    "message",
+    "issues",
+    "child",
+    "parent",
+    "last",
+]
 
 [tool.family]
 doors = ["refdef"]
