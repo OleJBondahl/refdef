@@ -38,11 +38,30 @@ def test_r11_rejected_line_is_not_an_address(line: str):
     assert [(i.code, i.subject) for i in result.issues] == [(IssueCode.NOT_ADDRESS, line)]
 
 
-def test_r11_outer_whitespace_is_stripped():
-    """R11: outer whitespace is dropped without an issue."""
+def test_r4_outer_whitespace_is_repaired_with_an_issue():
+    """R4, M13: outer whitespace is dropped and reported as `parse` reports it."""
     result = parse_address("  %QW4\n")
-    assert result.issues == ()
+    assert [(i.code, i.subject) for i in result.issues] == [(IssueCode.WHITESPACE, "  %QW4\n")]
     assert str(result.value) == "%QW4"
+
+
+def test_r4_leading_zeros_are_repaired_per_element():
+    """R4, M13: each path element with leading zeros is repaired and named in its own issue."""
+    one = parse_address("%I007")
+    assert str(one.value) == "%I7"
+    assert [(i.code, i.subject) for i in one.issues] == [(IssueCode.LEADING_ZERO, "007")]
+    many = parse_address("%IX00.2.010")
+    assert str(many.value) == "%IX0.2.10"
+    assert [(i.code, i.subject) for i in many.issues] == [
+        (IssueCode.LEADING_ZERO, "00"),
+        (IssueCode.LEADING_ZERO, "010"),
+    ]
+
+
+def test_r4_nine_digit_limit_counts_after_the_zeros_are_stripped():
+    """R4: `%I0000000001` is index 1; ten significant digits are still refused."""
+    assert str(parse_address("%I0000000001").value) == "%I1"
+    assert parse_address("%I1234567890").value is None
 
 
 def test_r11_parse_address_refuses_a_non_str():
