@@ -69,20 +69,35 @@ class Address:
         return self
 
 
+def _element(part: str, issues: list[Issue]) -> str:
+    """One path element without its leading zeros; the repair is an issue naming the element."""
+    stripped = part.lstrip("0") or "0"
+    if len(part) > 1 and part.startswith("0"):
+        issues.append(Issue(IssueCode.LEADING_ZERO, part, "leading zero dropped"))
+    return stripped
+
+
 def parse_address(text: str) -> Parsed[Address | None]:
-    """Read a direct address; text that is not one gives `None` and a NOT_ADDRESS issue."""
+    """Read a direct address; repairs (outer whitespace, leading zeros) are issues.
+
+    Text that is not an address gives `None` and a NOT_ADDRESS issue.
+    """
     if not isinstance(text, str):
         msg = "text must be a str"
         raise TypeError(msg)
-    match = _ADDRESS.fullmatch(text.strip())
+    body = text.strip()
+    match = _ADDRESS.fullmatch(body)
     if match is None:
         return Parsed(None, (Issue(IssueCode.NOT_ADDRESS, text, "not a direct address"),))
+    issues: list[Issue] = []
+    if body != text:
+        issues.append(Issue(IssueCode.WHITESPACE, text, "outer whitespace of the address removed"))
     memory, size, rest = match.groups()
-    parts = [] if rest == "*" else rest.split(".")
+    parts = [] if rest == "*" else [_element(part, issues) for part in rest.split(".")]
     if any(len(part) > _DIGITS for part in parts):
         return Parsed(None, (Issue(IssueCode.NOT_ADDRESS, text, "an index of over nine digits"),))
     path = tuple(map(int, parts))
-    return Parsed(Address(Memory(memory), Size(size), path), ())
+    return Parsed(Address(Memory(memory), Size(size), path), tuple(issues))
 
 
 @dataclass(frozen=True)

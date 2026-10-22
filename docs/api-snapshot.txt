@@ -93,4 +93,6 @@ class Size
     The access size of an address: none, bit, byte, word, double word or long word.
 
 parse_address(text: 'str') -> 'Parsed[Address | None]'
-    Read a direct address; text that is not one gives `None` and a NOT_ADDRESS issue.
+    Read a direct address; repairs (outer whitespace, leading zeros) are issues.
+
+    Text that is not an address gives `None` and a NOT_ADDRESS issue.
