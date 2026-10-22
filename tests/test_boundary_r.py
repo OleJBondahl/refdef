@@ -80,7 +80,7 @@ def found_sites(root: Path) -> set[tuple[str, str]]:
     """Every (file, operation) under `root` that reads inside an opaque value."""
     return {
         (path.name, op)
-        for path in sorted(root.glob("*.py"))
+        for path in sorted(root.rglob("*.py"))
         for op in operations(ast.parse(path.read_text(encoding="utf-8")))
     }
 
