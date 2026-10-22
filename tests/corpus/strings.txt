@@ -1,0 +1,73 @@
+=F1
+-K1
++3
+%T1
+#X7
+==F1
+++S1
+-U1-U2-K3
++ER-U1-U2-K3
+=U1=P1+ER+C1-K1
+=A1+C1-K1
+=A1+C1-K2
+=A1+C2-F1
+=CS-CV1
+==F1++S1-K1
++3+3
+-W25-1
++ER
+-PE_BAR
++Room 1
+-K0
++0
+-A0
++00
+-K1234567890
++1234567890
++Skjåp
+=Pumpe 3
+-X 1
+-K999999999
++999999999
+-KE
+-ABC
+-KEB12
+-WXYZ4
+<Plant A>=P1
+<N>-K1
+<Plant A>
+<A B>+ER-K1
+<a-b+c>=F1
+-K1:13
+-X1:L1:1
+-X1:OUT1-
+-K1:A A 9
+-X1:L+:1
+-X1:A;B
+-X1:1&2
+-X1:<>
++ER-X1:1:2:3
+<Plant A>-K1:14
+-KE1:DI03
+-K1:PIN0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZa
+-K1;SYSTEM_CAN_L
+;ALARM
+=U1-K1;a:b;c&d
+<Plant A>-K1;N 1
++ER;X
+-K1;<>
++A1B2
++a  b
+%T1+ER
+#X7-K1
++3-K1+3
+=F1-K1+3
++Øresund
+-K1:0
+-K1:ALL-IN
+-K1:ALL.IN
+-K1;NAME WITH SPACES
+-K1;a:b
+-K1:=x
++ER:P+1
+-KE12;LAMP&1
