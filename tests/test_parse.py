@@ -35,6 +35,7 @@ TABLE = [
     ("-ER", P, "-ER", ("free_label",)),
     ("-a<b", P, "", ("bad_label",)),
     ("-K1.2", P, "-K1-2", ("dot_level",)),
+    ("=P1-.5", P, "=P1=5", ("empty_level", "dot_level")),
     ("-K1:A:", P, "-K1:A", ("empty_pin",)),
     ("-K1: A ", P, "-K1:A", ("whitespace",)),
     ("-K1:", P, "-K1", ("empty_pin",)),

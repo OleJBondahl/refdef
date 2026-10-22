@@ -90,20 +90,25 @@ def _level(aspect: Aspect, raw: str, issues: list[Issue]) -> Level | None:
 def _levels(head: str, bare: Aspect, issues: list[Issue]) -> tuple[Level, ...]:
     """Split the head on signs and read each body; a dot repeats the aspect before it."""
     parts = _SIGNS.split(head)
-    levels: list[Level | None] = []
+    levels: list[Level] = []
     aspect = bare
     if _clean(parts[0]):
         _issue(issues, IssueCode.NO_SIGN, parts[0], f"no sign; read as {bare.name.lower()}")
-        levels.append(_level(aspect, parts[0], issues))
+        first = _level(aspect, parts[0], issues)
+        if first is not None:
+            levels.append(first)
     elif parts[0]:
         _issue(issues, IssueCode.WHITESPACE, parts[0], "whitespace before the first sign removed")
     for sign, body in zip(parts[1::2], parts[2::2], strict=True):
         if sign == ".":
             _issue(issues, IssueCode.DOT_LEVEL, body, "a dot read as a level of the same aspect")
+            aspect = levels[-1].aspect if levels else aspect
         else:
             aspect = _BY_SIGN[sign]
-        levels.append(_level(aspect, body, issues))
-    return tuple(level for level in levels if level is not None)
+        level = _level(aspect, body, issues)
+        if level is not None:
+            levels.append(level)
+    return tuple(levels)
 
 
 def _pins(rest: str, issues: list[Issue]) -> tuple[str, ...]:
