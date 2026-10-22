@@ -87,6 +87,21 @@ def _level(aspect: Aspect, raw: str, issues: list[Issue]) -> Level | None:
     return Level(aspect, letters.upper(), int(digits))
 
 
+def _signed(
+    sign: str, body: str, levels: list[Level], aspect: Aspect, issues: list[Issue]
+) -> Aspect:
+    """Read one signed body onto `levels`; a dot takes the aspect of the previous level (M6)."""
+    if sign == ".":
+        _issue(issues, IssueCode.DOT_LEVEL, body, "a dot read as a level of the same aspect")
+        aspect = levels[-1].aspect if levels else aspect
+    else:
+        aspect = _BY_SIGN[sign]
+    level = _level(aspect, body, issues)
+    if level is not None:
+        levels.append(level)
+    return aspect
+
+
 def _levels(head: str, bare: Aspect, issues: list[Issue]) -> tuple[Level, ...]:
     """Split the head on signs and read each body; a dot repeats the aspect before it."""
     parts = _SIGNS.split(head)
@@ -100,14 +115,7 @@ def _levels(head: str, bare: Aspect, issues: list[Issue]) -> tuple[Level, ...]:
     elif parts[0]:
         _issue(issues, IssueCode.WHITESPACE, parts[0], "whitespace before the first sign removed")
     for sign, body in zip(parts[1::2], parts[2::2], strict=True):
-        if sign == ".":
-            _issue(issues, IssueCode.DOT_LEVEL, body, "a dot read as a level of the same aspect")
-            aspect = levels[-1].aspect if levels else aspect
-        else:
-            aspect = _BY_SIGN[sign]
-        level = _level(aspect, body, issues)
-        if level is not None:
-            levels.append(level)
+        aspect = _signed(sign, body, levels, aspect, issues)
     return tuple(levels)
 
 
