@@ -141,6 +141,9 @@ ignore_names = [
     "child",
     "parent",
     "last",
+    "version",
+    "extend",
+    "ENTRIES_SHA256",
 ]
 
 [tool.family]

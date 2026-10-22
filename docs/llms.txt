@@ -48,3 +48,7 @@ IssueCode: the closed set of 21 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.
+Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes and aspects.
+ClassEntry: one class code with its title, the typical device of the class.
+STANDARD: the shipped scheme (function, product and location on, one to three letters without I and O, the versioned standard class table).
+check: tests designations against a scheme and returns an issue for each finding, in order; it reads nothing but its scheme argument.

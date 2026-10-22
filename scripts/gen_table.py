@@ -64,7 +64,8 @@ def entries_hash(entries: list[tuple[str, str]]) -> str:
 
 def render(entries: list[tuple[str, str]], version: str) -> str:
     """The text of the generated module."""
-    lines = [HEADER, "", 'NAME = "standard"', f"VERSION = {json.dumps(version)}"]
+    lines = [HEADER, '"""The generated class table."""', "", 'NAME = "standard"']
+    lines.append(f"VERSION = {json.dumps(version)}")
     lines += [f"DEPTH = {DEPTH}", "ENTRIES: tuple[tuple[str, str], ...] = ("]
     lines += [f"    ({json.dumps(c)}, {json.dumps(t, ensure_ascii=False)})," for c, t in entries]
     lines += [")", f'ENTRIES_SHA256 = "{entries_hash(entries)}"']

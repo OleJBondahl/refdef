@@ -4,6 +4,9 @@ class Aspect
 
     The first three are on in the shipped scheme; declaration order is the rank tie-break.
 
+class ClassEntry(code: 'str', title: 'str') -> 'None'
+    One class code with its title, the typical device of the class.
+
 class Designation(levels: 'tuple[Level, ...]' = (), top: 'str' = '') -> 'None'
     A tuple of levels and an optional top node, built by the constructor and `child` only.
 
@@ -23,6 +26,16 @@ class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, lab
 class Parsed(value: 'T', issues: 'tuple[Issue, ...]') -> 'None'
     A value read from text together with the issues the reader found.
 
+STANDARD: Scheme
+    What `check` tests against: aspects on, a letter rule and a class table.
+
+    `STANDARD` is the shipped scheme: `= - +` on, 1-3 letters without I and O, a versioned table.
+
+class Scheme(name: 'str', aspects: 'frozenset[Aspect]', letters: 'LetterRule', classes: 'ClassTable') -> 'None'
+    What `check` tests against: aspects on, a letter rule and a class table.
+
+    `STANDARD` is the shipped scheme: `= - +` on, 1-3 letters without I and O, a versioned table.
+
 class Signal(of: 'Designation | None', name: 'str') -> 'None'
     A signal name on a designation, printed `of;name`; `of` is None for a bare name.
 
@@ -32,6 +45,11 @@ class Terminal(of: 'Designation', pins: 'tuple[str, ...]') -> 'None'
     A designation and the pins on it, printed `of:pin:pin`.
 
     At least one pin; each is stripped, non-empty and without `:`. Pins are opaque text.
+
+check(designations: 'Iterable[Designation]', scheme: 'Scheme') -> 'tuple[Issue, ...]'
+    Issues of the designations against `scheme`, in order; duplicates first for each one.
+
+    Terminals and signals are not checked: pass their `of`.
 
 parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal]'
     Read text as a designation, terminal or signal, with an issue for each repair.
