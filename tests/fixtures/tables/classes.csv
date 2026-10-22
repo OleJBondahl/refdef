@@ -1,0 +1,7 @@
+code,parent,title,why
+B,,Sensor,because
+K,,Relay,because
+KA,K,Auxiliary relay,because
+KB,K,Time delay relay,because
+BA,B,Pressure sensor,because
+BB,B,Level switch,because
