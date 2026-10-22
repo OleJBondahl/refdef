@@ -58,6 +58,7 @@ sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool
     A sort key: per level the rank of its aspect in `aspects` and its natural key.
 
     Aspects not listed rank after the listed ones, in enum order. The top is not in the key.
+
 ## refdef.plc
 class Address(memory: 'Memory', size: 'Size', path: 'tuple[int, ...]') -> 'None'
     A direct address printed `%` memory size path; an empty path is the incomplete `%I*`.
