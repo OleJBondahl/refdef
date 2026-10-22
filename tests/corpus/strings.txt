@@ -71,3 +71,40 @@
 -K1:=x
 +ER:P+1
 -KE12;LAMP&1
+=N-T1+L11
++ER-U1-U2-K1
+<MCC 5>+3+3
+<MCC 5>
+<A.B>+ER
+<x=y#z%w>-K1
+<ø 日>=F1
+<a b - c>-Q1
++Ålesund 12
++Sala 3 Øst
++Hall 😀
+=Pumpe 3-Ventil 4
+-Motor 1 A
++1 2
+-pump
+%Type 7
+#Sort 3
+==F1++S1
+==A1==B2
+++S1++S2
++999999999+1
+-K1:1;2
+-X1:A&B
+-X1:<A>
+-X1:+-.=
+-X1:a-b
+-X1:a b:c d
+<T>:1
+<T>;X
+:1
+:A B
+;X Y
+;a;b
+;x:y&z
+-K1;a&b
+<T>-K1;a:b
++ER;Skjåp 😀
