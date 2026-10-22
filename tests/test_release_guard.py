@@ -77,6 +77,14 @@ def test_a_changed_snapshot_with_a_changelog_line_passes(repo):
     assert run(repo)[0] == 0
 
 
+def test_a_second_release_passes_on_its_own_version_section(repo):
+    _tag(repo)
+    _write(repo, NEW, version="0.2.0")
+    log = "# Changelog\n\n## Unreleased\n\n## 0.2.0 (2026-10-22)\n\n- foo takes c\n\n## 0.1.0\n"
+    (repo / "docs" / "CHANGELOG.md").write_text(log, encoding="utf-8")
+    assert run(repo)[0] == 0
+
+
 def test_a_removed_name_with_the_same_version_fails(repo):
     _tag(repo)
     _write(repo, GONE, line="\n- Bar removed\n")

@@ -32,12 +32,13 @@ def names(snapshot: str) -> set[str]:
     return found
 
 
-def unreleased(changelog: str) -> list[str]:
-    """The content lines under `## Unreleased`, before the next `## ` heading."""
+def unreleased(changelog: str, current: str = "") -> list[str]:
+    """The content lines under `## Unreleased` and under `## <current> (`, before the next `## `."""
     lines, inside = [], False
     for line in changelog.splitlines():
         if line.startswith("## "):
-            inside = line.strip() == "## Unreleased"
+            head = line.strip()
+            inside = head == "## Unreleased" or bool(current and head.startswith(f"## {current} ("))
         elif inside and line.strip() and not line.startswith("#"):
             lines.append(line)
     return lines
@@ -60,7 +61,10 @@ def check(tag: str) -> str | None:
     new = Path(SNAPSHOT).read_text(encoding="utf-8")
     if old == new:
         return None
-    if not unreleased(CHANGELOG.read_text(encoding="utf-8")):
+    current = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))["project"][
+        "version"
+    ]
+    if not unreleased(CHANGELOG.read_text(encoding="utf-8"), current):
         return f"{SNAPSHOT} changed since {tag}: add a line under '## Unreleased' in {CHANGELOG}"
     gone = sorted(names(old) - names(new))
     old_version = version(_git("show", f"{tag}:pyproject.toml").stdout)
