@@ -1,4 +1,4 @@
-"""R7: seeded properties of `common`, `relative_to` and `Terminal.relative_to` over small random trees."""
+"""R7: seeded properties of `common` and `relative_to` over small random trees."""
 
 import random
 
@@ -17,8 +17,8 @@ def _random(rng: random.Random) -> Designation:
 
 
 def test_pair_properties():
-    """R7: every argument is within `common`; the remainder is shorter by the common's length; Terminal follows `of`."""
-    rng = random.Random(7)
+    """R7: a is within common; the remainder loses the common's levels; Terminal follows `of`."""
+    rng = random.Random(7)  # noqa: S311 - seeded test data
     for _ in range(500):
         a, b = _random(rng), _random(rng)
         c = Designation.common(a, b)
@@ -29,7 +29,7 @@ def test_pair_properties():
 
 def test_common_of_three_has_every_argument_within():
     """R7: for three arguments each is within `common(*ds)`."""
-    rng = random.Random(11)
+    rng = random.Random(11)  # noqa: S311 - seeded test data
     for _ in range(500):
         ds = [_random(rng) for _ in range(3)]
         c = Designation.common(*ds)
