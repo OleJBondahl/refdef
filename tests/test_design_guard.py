@@ -82,5 +82,40 @@ def test_an_all_zero_base_examines_every_commit(repo):
     assert run(repo, ZEROS)[0] == 1
 
 
+def _exempting(repo: Path, *entries: str) -> None:
+    listed = ", ".join(f'"{e}"' for e in entries)
+    (repo / "pyproject.toml").write_text(
+        CONFIG + f"design_review_exempt = [{listed}]\n", encoding="utf-8"
+    )
+
+
+def test_an_exempt_sha_passes(repo):
+    sha = commit(repo, "RULES.md")
+    _exempting(repo, sha)
+    assert run(repo) == (0, "design_guard: ok\n")
+
+
+def test_an_unexempted_commit_beside_an_exempt_one_still_fails(repo):
+    exempt = commit(repo, "RULES.md")
+    other = commit(repo, "RULES.md")
+    _exempting(repo, exempt)
+    code, out = run(repo)
+    assert code == 1
+    assert other[:9] in out
+    assert exempt[:9] not in out
+
+
+@pytest.mark.parametrize("entry", ["abc1234", "A" * 40, "0" * 39, "0" * 41, "4eea0fda9*"])
+def test_a_bad_exempt_entry_errors_and_names_the_entry(repo, entry):
+    commit(repo, "RULES.md")
+    _exempting(repo, entry)
+    done = subprocess.run(  # noqa: S603 - runs the repository's own script
+        [sys.executable, str(GUARD)], cwd=repo, capture_output=True, text=True, check=False
+    )
+    assert done.returncode != 0
+    assert repr(entry) in done.stderr
+    assert "full 40-character" in done.stderr
+
+
 def test_the_real_repository_passes():
     assert run(family.ROOT) == (0, "design_guard: ok\n")

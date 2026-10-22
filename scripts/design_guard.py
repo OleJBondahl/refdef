@@ -4,12 +4,14 @@ Usage (from the repository root):
     uv run python scripts/design_guard.py [BASE]
 """
 
+import re
 import subprocess
 import sys
 import tomllib
 from pathlib import Path
 
 ZEROS = "0" * 40
+FULL_SHA = re.compile(r"[0-9a-f]{40}")
 
 
 def _git(*args: str, stdin: str | None = None) -> str:
@@ -44,10 +46,27 @@ def reviewed(sha: str) -> bool:
     return False
 
 
-def offenders(base: str | None, review: list[str]) -> list[str]:
-    """The short shas of commits that touch a review path with no trailer."""
+def exempt_shas(family: dict) -> frozenset[str]:
+    """The full shas `design_review_exempt` lists; an entry that is not 40 lowercase hex raises."""
+    listed = family.get("design_review_exempt", [])
+    for entry in listed:
+        if not (isinstance(entry, str) and FULL_SHA.fullmatch(entry)):
+            msg = (
+                f"design_review_exempt entry {entry!r} is not a full 40-character lowercase "
+                "hex sha; list the full sha (git rev-parse), never a prefix or a pattern"
+            )
+            raise ValueError(msg)
+    return frozenset(listed)
+
+
+def offenders(
+    base: str | None, review: list[str], exempt: frozenset[str] = frozenset()
+) -> list[str]:
+    """The short shas of commits that touch a review path with no trailer and are not exempt."""
     bad = []
     for sha in commits(base):
+        if sha in exempt:
+            continue
         paths = _git("diff-tree", "--root", "--no-commit-id", "--name-only", "-r", sha).split("\n")
         if touches(paths, review) and not reviewed(sha):
             bad.append(sha[:9])
@@ -57,8 +76,8 @@ def offenders(base: str | None, review: list[str]) -> list[str]:
 def main(argv: list[str]) -> int:
     """Run the guard in the current directory; return the exit code."""
     config = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
-    review = config["tool"]["family"]["review_paths"]
-    bad = offenders(argv[0] if argv else None, review)
+    family = config["tool"]["family"]
+    bad = offenders(argv[0] if argv else None, family["review_paths"], exempt_shas(family))
     if bad:
         sys.stdout.write(
             f"design_guard: commits without a Design-review trailer: {' '.join(bad)}\n"
