@@ -46,10 +46,21 @@ class Terminal(of: 'Designation', pins: 'tuple[str, ...]') -> 'None'
 
     At least one pin; each is stripped, non-empty and without `:`. Pins are opaque text.
 
+allocate(aspect: 'Aspect', code: 'str', taken: 'Collection[Level]', reserved: 'Collection[Level]' = (), *, first: 'int' = 1) -> 'int'
+    The smallest number from `first` for which `Level(aspect, code, n)` is in neither collection.
+
+    `first` below 1 is a TypeError. Nothing is stored: the caller passes what is taken.
+
 check(designations: 'Iterable[Designation]', scheme: 'Scheme') -> 'tuple[Issue, ...]'
     Issues of the designations against `scheme`, in order; duplicates first for each one.
 
     Terminals and signals are not checked: pass their `of`.
+
+natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+    A sort key: digit runs by value, text runs as text, numbers first, then the raw text.
+
+number_group(aspect: 'Aspect', codes: 'Sequence[str]', taken: 'Collection[Level]' = (), reserved: 'Collection[Level]' = ()) -> 'tuple[Level, ...]'
+    One level per code, each numbered after the earlier ones; `taken` is not changed.
 
 parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal]'
     Read text as a designation, terminal or signal, with an issue for each repair.
@@ -60,3 +71,26 @@ render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Col
     Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
 
     `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+
+sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+    A sort key: per level the rank of its aspect in `aspects` and its natural key.
+
+    Aspects not listed rank after the listed ones, in enum order. The top is not in the key.
+
+## refdef.plc
+class Address(memory: 'Memory', size: 'Size', path: 'tuple[int, ...]') -> 'None'
+    A direct address printed `%` memory size path; an empty path is the incomplete `%I*`.
+
+    A path index is an int from 0 to 999_999_999; any other shape raises TypeError.
+
+class ChannelTag(terminal: 'Terminal', address: 'Address | None' = None) -> 'None'
+    A terminal with an optional address, printed as the terminal alone (`-KE1:DI03`).
+
+class Memory
+    The memory area of an address: input, output or marker; the value is the letter.
+
+class Size
+    The access size of an address: none, bit, byte, word, double word or long word.
+
+parse_address(text: 'str') -> 'Parsed[Address | None]'
+    Read a direct address; text that is not one gives `None` and a NOT_ADDRESS issue.

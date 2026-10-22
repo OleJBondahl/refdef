@@ -6,7 +6,7 @@ import enum
 import importlib
 import inspect
 
-DOORS: tuple[str, ...] = ("refdef",)
+DOORS: tuple[str, ...] = ("refdef", "refdef.plc")
 
 
 def _signature(obj: object) -> str:
