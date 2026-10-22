@@ -60,3 +60,34 @@ class Designation:
     def last(self) -> Level | None:
         """The last level, or None for a designation without levels."""
         return self.levels[-1] if self.levels else None
+
+    def within(self, root: Designation) -> bool:
+        """True when `root` is a head of this designation, aspect by aspect (the top too)."""
+        _need_designation(root)
+        return root.top in ("", self.top) and _heads.within(self.levels, root.levels)
+
+    def relative_to(self, root: Designation) -> Designation:
+        """This designation without the heads `root` holds; unchanged when it is not within."""
+        if not self.within(root):
+            return self
+        return Designation(
+            _heads.drop_heads(self.levels, root.levels), "" if root.top == self.top else self.top
+        )
+
+    @staticmethod
+    def common(*designations: Designation) -> Designation:
+        """The longest head per aspect all share, ordered as the first; the root for none."""
+        for each in designations:
+            _need_designation(each)
+        if not designations:
+            return Designation()
+        first, *others = designations
+        top = first.top if all(d.top == first.top for d in others) else ""
+        return Designation(_heads.common(first.levels, *(d.levels for d in others)), top)
+
+
+def _need_designation(value: object) -> None:
+    """Raise TypeError unless `value` is a Designation."""
+    if not isinstance(value, Designation):
+        msg = "root and the arguments of common must be Designation"
+        raise TypeError(msg)

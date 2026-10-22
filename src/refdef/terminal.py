@@ -38,6 +38,10 @@ class Terminal:
         """The strict printed form."""
         return ":".join((str(self.of), *self.pins))
 
+    def relative_to(self, root: Designation) -> Terminal:
+        """The terminal with its designation made relative to `root`; the pins are kept."""
+        return Terminal(self.of.relative_to(root), self.pins)
+
 
 @dataclass(frozen=True)
 class Signal:
@@ -63,3 +67,10 @@ class Signal:
     def __str__(self) -> str:
         """The strict printed form."""
         return (str(self.of) if self.of is not None else "") + ";" + self.name
+
+    def relative_to(self, root: Designation) -> Signal:
+        """The signal with its designation made relative to `root`; None if nothing is left."""
+        if self.of is None:
+            return self
+        rest = self.of.relative_to(root)
+        return Signal(rest if rest.levels or rest.top else None, self.name)
