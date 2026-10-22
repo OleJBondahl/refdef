@@ -12,7 +12,4 @@ Every change to the public surface gets a line under Unreleased until the releas
 - Add the door `refdef.plc`: `Memory`, `Size`, `Address`, `ChannelTag` and `parse_address`.
 - Add `Scheme`, `ClassEntry`, `STANDARD` and `check`.
 - Add class table version 1: 17 main letters and 166 two-letter codes (first version, no moved code).
-
-## 0.1.0 (2026-10-22)
-
-- Empty package scaffold with the family rule gates.
+- First release: the package scaffold with the family rule gates, standard library only.
