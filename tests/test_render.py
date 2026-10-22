@@ -1,5 +1,8 @@
 """R3 gates: strict `str`, and each `render` option changes only its documented characters."""
 
+import importlib.util
+from pathlib import Path
+
 import pytest
 
 from refdef import Aspect, Designation, Level, Signal, Terminal, render
@@ -122,3 +125,33 @@ def test_terminal_and_signal_print_through_str_only():
     assert str(Signal(Designation().child(P, "K", 1), "SYSTEM_CAN_L")) == "-K1;SYSTEM_CAN_L"
     assert str(Signal(None, "N")) == ";N"
     assert str(Signal(Designation(top="T"), "a:b;c&d")) == "<T>;a:b;c&d"
+
+
+_CORPUS = Path(__file__).resolve().parent / "corpus"
+_SPEC = importlib.util.spec_from_file_location(
+    "gen_render_corpus", Path(__file__).resolve().parent.parent / "scripts" / "gen_render_corpus.py"
+)
+_GEN = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_GEN)
+
+
+def _lines(name: str) -> list[str]:
+    """The lines of a corpus file, dropping only its final newline."""
+    return (_CORPUS / name).read_text(encoding="utf-8").removesuffix("\n").split("\n")
+
+
+def test_golden_render_corpus():
+    """R3: each line of render.txt is `columns()` of the same line of strings.txt."""
+    strings = _lines("strings.txt")
+    golden = _lines("render.txt")
+    assert len(golden) == len(strings)
+    for text, expected in zip(strings, golden, strict=True):
+        assert _GEN.columns(text) == expected, f"render differs for string {text!r}"
+
+
+def test_golden_lines_are_four_columns_led_by_strict_print():
+    """R3: every render.txt line has four TAB-separated columns and column 1 is the input string."""
+    for text, golden in zip(_lines("strings.txt"), _lines("render.txt"), strict=True):
+        fields = golden.split("\t")
+        assert len(fields) == 4, f"string {text!r}"
+        assert fields[0] == text, f"strict print differs for string {text!r}"

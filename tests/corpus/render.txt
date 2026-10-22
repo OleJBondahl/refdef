@@ -1,0 +1,110 @@
+=F1	=F1	=F1	F1
+-K1	-K1	-K1	K1
++3	+3	+3	3
+%T1	%T1	%T1	T1
+#X7	#X7	#X7	X7
+==F1	==F1	==F1	F1
+++S1	++S1	++S1	S1
+-U1-U2-K3	-U1-U2-K3	-U1-U2-K3	U1-U2-K3
++ER-U1-U2-K3	+ER-U1-U2-K3	+ER-U1-U2-K3	ER-U1-U2-K3
+=U1=P1+ER+C1-K1	=U1=P1+ER+C1-K1	=U1=P1+ER+C1-K1	U1=P1+ER+C1-K1
+=A1+C1-K1	=A1+C1-K1	=A1+C1-K1	A1+C1-K1
+=A1+C1-K2	=A1+C1-K2	=A1+C1-K2	A1+C1-K2
+=A1+C2-F1	=A1+C2-F1	=A1+C2-F1	A1+C2-F1
+=CS-CV1	=CS-CV1	=CS-CV1	CS-CV1
+==F1++S1-K1	==F1++S1-K1	==F1++S1-K1	F1++S1-K1
++3+3	+3+3	+3+3	3+3
+-W25-1	-W0025-1	-W25.1	W25-1
++ER	+ER	+ER	ER
+-PE_BAR	-PE_BAR	-PE_BAR	PE_BAR
++Room 1	+Room 1	+Room 1	Room 1
+-K0	-K0	-K0	K0
++0	+0	+0	0
+-A0	-A0	-A0	A0
++00	+00	+00	00
+-K1234567890	-K1234567890	-K1234567890	K1234567890
++1234567890	+1234567890	+1234567890	1234567890
++Skjåp	+Skjåp	+Skjåp	Skjåp
+=Pumpe 3	=Pumpe 3	=Pumpe 3	Pumpe 3
+-X 1	-X 1	-X 1	X 1
+-K999999999	-K999999999	-K999999999	K999999999
++999999999	+999999999	+999999999	999999999
+-KE	-KE	-KE	KE
+-ABC	-ABC	-ABC	ABC
+-KEB12	-KEB12	-KEB12	KEB12
+-WXYZ4	-WXYZ4	-WXYZ4	WXYZ4
+<Plant A>=P1	<Plant A>=P1	<Plant A>=P1	<Plant A>P1
+<N>-K1	<N>-K1	<N>-K1	<N>K1
+<Plant A>	<Plant A>	<Plant A>	<Plant A>
+<A B>+ER-K1	<A B>+ER-K1	<A B>+ER-K1	<A B>ER-K1
+<a-b+c>=F1	<a-b+c>=F1	<a-b+c>=F1	<a-b+c>F1
+-K1:13	-K1:13	-K1:13	K1:13
+-X1:L1:1	-X1:L1:1	-X1:L1:1	X1:L1:1
+-X1:OUT1-	-X1:OUT1-	-X1:OUT1-	X1:OUT1-
+-K1:A A 9	-K1:A A 9	-K1:A A 9	K1:A A 9
+-X1:L+:1	-X1:L+:1	-X1:L+:1	X1:L+:1
+-X1:A;B	-X1:A;B	-X1:A;B	X1:A;B
+-X1:1&2	-X1:1&2	-X1:1&2	X1:1&2
+-X1:<>	-X1:<>	-X1:<>	X1:<>
++ER-X1:1:2:3	+ER-X1:1:2:3	+ER-X1:1:2:3	ER-X1:1:2:3
+<Plant A>-K1:14	<Plant A>-K1:14	<Plant A>-K1:14	<Plant A>K1:14
+-KE1:DI03	-KE1:DI03	-KE1:DI03	KE1:DI03
+-K1:PIN0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZa	-K1:PIN0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZa	-K1:PIN0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZa	K1:PIN0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZa
+-K1;SYSTEM_CAN_L	-K1;SYSTEM_CAN_L	-K1;SYSTEM_CAN_L	K1;SYSTEM_CAN_L
+;ALARM	;ALARM	;ALARM	;ALARM
+=U1-K1;a:b;c&d	=U1-K1;a:b;c&d	=U1-K1;a:b;c&d	U1-K1;a:b;c&d
+<Plant A>-K1;N 1	<Plant A>-K1;N 1	<Plant A>-K1;N 1	<Plant A>K1;N 1
++ER;X	+ER;X	+ER;X	ER;X
+-K1;<>	-K1;<>	-K1;<>	K1;<>
++A1B2	+A1B2	+A1B2	A1B2
++a  b	+a  b	+a  b	a  b
+%T1+ER	%T1+ER	%T1+ER	T1+ER
+#X7-K1	#X7-K1	#X7-K1	X7-K1
++3-K1+3	+3-K1+3	+3-K1+3	3-K1+3
+=F1-K1+3	=F1-K1+3	=F1-K1+3	F1-K1+3
++Øresund	+Øresund	+Øresund	Øresund
+-K1:0	-K1:0	-K1:0	K1:0
+-K1:ALL-IN	-K1:ALL-IN	-K1:ALL-IN	K1:ALL-IN
+-K1:ALL.IN	-K1:ALL.IN	-K1:ALL.IN	K1:ALL.IN
+-K1;NAME WITH SPACES	-K1;NAME WITH SPACES	-K1;NAME WITH SPACES	K1;NAME WITH SPACES
+-K1;a:b	-K1;a:b	-K1;a:b	K1;a:b
+-K1:=x	-K1:=x	-K1:=x	K1:=x
++ER:P+1	+ER:P+1	+ER:P+1	ER:P+1
+-KE12;LAMP&1	-KE12;LAMP&1	-KE12;LAMP&1	KE12;LAMP&1
+=N-T1+L11	=N-T1+L11	=N-T1+L11	N-T1+L11
++ER-U1-U2-K1	+ER-U1-U2-K1	+ER-U1-U2-K1	ER-U1-U2-K1
+<MCC 5>+3+3	<MCC 5>+3+3	<MCC 5>+3+3	<MCC 5>3+3
+<MCC 5>	<MCC 5>	<MCC 5>	<MCC 5>
+<A.B>+ER	<A.B>+ER	<A.B>+ER	<A.B>ER
+<x=y#z%w>-K1	<x=y#z%w>-K1	<x=y#z%w>-K1	<x=y#z%w>K1
+<ø 日>=F1	<ø 日>=F1	<ø 日>=F1	<ø 日>F1
+<a b - c>-Q1	<a b - c>-Q1	<a b - c>-Q1	<a b - c>Q1
++Ålesund 12	+Ålesund 12	+Ålesund 12	Ålesund 12
++Sala 3 Øst	+Sala 3 Øst	+Sala 3 Øst	Sala 3 Øst
++Hall 😀	+Hall 😀	+Hall 😀	Hall 😀
+=Pumpe 3-Ventil 4	=Pumpe 3-Ventil 4	=Pumpe 3-Ventil 4	Pumpe 3-Ventil 4
+-Motor 1 A	-Motor 1 A	-Motor 1 A	Motor 1 A
++1 2	+1 2	+1 2	1 2
+-pump	-pump	-pump	pump
+%Type 7	%Type 7	%Type 7	Type 7
+#Sort 3	#Sort 3	#Sort 3	Sort 3
+==F1++S1	==F1++S1	==F1++S1	F1++S1
+==A1==B2	==A1==B2	==A1==B2	A1==B2
+++S1++S2	++S1++S2	++S1++S2	S1++S2
++999999999+1	+999999999+1	+999999999+1	999999999+1
+-K1:1;2	-K1:1;2	-K1:1;2	K1:1;2
+-X1:A&B	-X1:A&B	-X1:A&B	X1:A&B
+-X1:<A>	-X1:<A>	-X1:<A>	X1:<A>
+-X1:+-.=	-X1:+-.=	-X1:+-.=	X1:+-.=
+-X1:a-b	-X1:a-b	-X1:a-b	X1:a-b
+-X1:a b:c d	-X1:a b:c d	-X1:a b:c d	X1:a b:c d
+<T>:1	<T>:1	<T>:1	<T>:1
+<T>;X	<T>;X	<T>;X	<T>;X
+:1	:1	:1	:1
+:A B	:A B	:A B	:A B
+;X Y	;X Y	;X Y	;X Y
+;a;b	;a;b	;a;b	;a;b
+;x:y&z	;x:y&z	;x:y&z	;x:y&z
+-K1;a&b	-K1;a&b	-K1;a&b	K1;a&b
+<T>-K1;a:b	<T>-K1;a:b	<T>-K1;a:b	<T>K1;a:b
++ER;Skjåp 😀	+ER;Skjåp 😀	+ER;Skjåp 😀	ER;Skjåp 😀
