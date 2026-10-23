@@ -56,6 +56,11 @@ check(designations: 'Iterable[Designation]', scheme: 'Scheme') -> 'tuple[Issue, 
 
     Terminals and signals are not checked: pass their `of`.
 
+lowest_free(taken: 'Collection[int]', reserved: 'Collection[int]' = (), *, first: 'int' = 1) -> 'int'
+    The smallest number from `first` that is in neither `taken` nor `reserved`.
+
+    `reserved` is never handed out; the caller stores it. `first` below 1 is a TypeError.
+
 natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
     A sort key: digit runs by value, text runs as text, numbers first, then the raw text.
 

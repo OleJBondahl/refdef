@@ -5,7 +5,7 @@ from itertools import count
 
 import pytest
 
-from refdef import Aspect, Level, allocate, number_group
+from refdef import Aspect, Level, allocate, lowest_free, number_group
 
 P = Aspect.PRODUCT
 
@@ -66,3 +66,47 @@ def test_allocate_refuses_a_first_below_one_or_not_an_int(first):
     """R8: `first` is an int of at least 1, else TypeError."""
     with pytest.raises(TypeError):
         allocate(P, "K", (), first=first)
+
+
+def test_lowest_free_equals_brute_force_over_500_random_inputs():
+    """R8: lowest_free is the first n from `first` in neither collection; inputs are unchanged."""
+    rng = _rng(10)
+    for _ in range(500):
+        taken = {n for n in range(1, 12) if rng.random() < 0.6}
+        reserved = {n for n in range(1, 12) if rng.random() < 0.4}
+        first = rng.randint(1, 6)
+        expected = next(n for n in count(first) if n not in taken | reserved)
+        before = (set(taken), set(reserved))
+        assert lowest_free(taken, reserved, first=first) == expected
+        assert (taken, reserved) == before
+
+
+def test_lowest_free_equals_allocate_over_one_class():
+    """R8: over one aspect and code, lowest_free of the numbers is allocate of the levels."""
+    rng = _rng(11)
+    for _ in range(500):
+        taken = _levels(rng, P, "K", 12)
+        reserved = _levels(rng, P, "K", 12)
+        first = rng.randint(1, 6)
+        numbers = ({lv.number for lv in s if lv.number is not None} for s in (taken, reserved))
+        got = lowest_free(*numbers, first=first)
+        assert got == allocate(P, "K", taken, reserved, first=first)
+
+
+def test_lowest_free_skips_a_reserved_number_like_a_taken_one():
+    """R8: a reserved number leaves a gap."""
+    assert lowest_free({1, 2}, {3}) == 4
+    assert lowest_free(set(), {1}) == 2
+
+
+def test_lowest_free_of_nothing_is_first():
+    """R8: empty input gives `first`."""
+    assert lowest_free(()) == 1
+    assert lowest_free((), first=10) == 10
+
+
+@pytest.mark.parametrize("first", [0, -1, True, 1.0, "1"])
+def test_lowest_free_refuses_a_first_below_one_or_not_an_int(first):
+    """R8: `first` is an int of at least 1, else TypeError."""
+    with pytest.raises(TypeError):
+        lowest_free((), first=first)

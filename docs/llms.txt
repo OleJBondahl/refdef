@@ -33,7 +33,7 @@ R4. `parse` and `parse_address` return a value and an issue tuple for any string
 R5. `parse` takes no scheme, every rule that needs one (aspect on, letter count, never-letters, unknown class by `code[:depth]`, duplicate) lives in `check`, and no function reads a scheme or table other than through its argument.
 R6. `Issue` has exactly these three fields, no severity, and `IssueCode` is a closed enum of exactly 21 codes that every emitted issue uses: the parse family (16) `EMPTY`, `NO_SIGN`, `EMPTY_LEVEL`, `EMPTY_TOP`, `WHITESPACE`, `LOWER_CASE`, `LEADING_ZERO`, `ZERO_NUMBER`, `NUMBER_TOO_LARGE`, `FREE_LABEL`, `BAD_LABEL`, `DOT_LEVEL`, `EMPTY_PIN`, `EMPTY_NAME`, `UNSUPPORTED_SUFFIX`, `NOT_ADDRESS` (the last only from `parse_address`), and the check family (5) `ASPECT_OFF`, `LETTER_COUNT`, `NEVER_LETTER`, `UNKNOWN_CLASS`, `DUPLICATE`; the values are the lower-case names.
 R7. `within`, `relative_to` (on `Designation`, `Terminal` and `Signal`) and `common` follow the rule in `DESIGN.md` exactly, and every argument is within `common(*ds)`.
-R8. `allocate` returns the lowest free number from `first` given `taken` and `reserved`, `number_group` equals `allocate` applied in sequence with each result added to `taken`, and refdef holds no numbering store.
+R8. `allocate` returns the lowest free number from `first` given `taken` and `reserved`, `lowest_free` does the same over plain ints, `number_group` equals `allocate` applied in sequence with each result added to `taken`, and refdef holds no numbering store.
 R9. `natural_key` orders digit runs by value and text runs as text, numbers before text, with the raw text as the last tie-break; `sort_key` is one `(aspect rank, natural_key(level.text))` pair per level, with the aspect order a required keyword and an unlisted aspect ranked after the listed ones in enum order.
 R10. `ClassTable.version` is refdef's own line, bumps whenever the entry tuple changes, and the changelog names each moved code.
 R11. `refdef.plc` holds only the direct-address form (`%` + memory area + optional size + dotted path, `*` for incomplete), with `as_bit` the one normalisation, and every vendor dialect is its own module behind its own type.
@@ -49,6 +49,7 @@ Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
 render: the strict printer with the explicit options pad, dotted and bare.
 allocate: the lowest free number of a class given what is taken and reserved; stores nothing.
+lowest_free: the lowest free plain int from first given taken and reserved; stores nothing.
 number_group: levels for several codes, each numbered after the earlier ones; taken is not changed.
 natural_key: a sort key with digit runs by value, numbers before text, ties on the raw text.
 sort_key: a designation's key, one pair per level; the aspect order is a required keyword.

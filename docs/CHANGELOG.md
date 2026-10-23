@@ -5,6 +5,8 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- Add `lowest_free(taken, reserved=(), *, first=1)`: the lowest free number over plain ints.
+
 ## 0.1.0 (2026-10-22)
 
 - Add `Aspect`, `Level`, `Designation`, `Terminal`, `Signal`, `Issue`, `IssueCode`, `Parsed` and `render`.
