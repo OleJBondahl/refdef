@@ -27,9 +27,9 @@ print([i.code.value for i in check([parse("-J1", bare=P).value], STANDARD)])   #
 ```
 
 `never` bars further letters on top of the scheme's own: the new set is the union, so `I` and `O`
-stay barred and `extend` never lifts a letter.
+stay barred and `extend` never lifts a letter. Any iterable of letters works; a bare `str` is a `TypeError`.
 
 ```python
-strict = STANDARD.extend(never=frozenset("A"))
+strict = STANDARD.extend(never={"A"})
 print([i.code.value for i in check([parse("-A1", bare=P).value], strict)])   # ['never_letter', 'unknown_class']
 ```

@@ -177,9 +177,26 @@ def test_r5_extend_default_never_keeps_the_letter_rule():
     assert STANDARD.extend().letters == STANDARD.letters
 
 
-@pytest.mark.parametrize("never", ["A", frozenset({"a"}), frozenset({"AB"}), frozenset({1}), {"A"}])
-def test_r5_extend_never_refuses_anything_but_a_frozenset_of_capital_letters(never):
-    """R5: a `never` that is not a frozenset of single A-Z letters is a TypeError."""
+def test_r5_extend_never_accepts_a_set_and_a_tuple():
+    """R5: a set and a tuple of letters give the same Scheme as a frozenset."""
+    want = STANDARD.extend(never=frozenset("QA"))
+    assert STANDARD.extend(never={"Q", "A"}) == want
+    assert STANDARD.extend(never=("Q", "A")) == want
+    assert want.letters.never == frozenset("IOQA")
+
+
+def test_r5_extend_never_refuses_a_bare_str():
+    """R5: "IO" is a TypeError, not two letters; a one-letter str is refused too."""
+    for text in ("IO", "A"):
+        with pytest.raises(TypeError):
+            STANDARD.extend(never=text)
+
+
+@pytest.mark.parametrize(
+    "never", [frozenset({"a"}), frozenset({"AB"}), frozenset({1}), ["a"], ("AB",), 5]
+)
+def test_r5_extend_never_refuses_non_letters(never):
+    """R5: a `never` holding anything but single A-Z letters is a TypeError."""
     with pytest.raises(TypeError):
         STANDARD.extend(never=never)
 

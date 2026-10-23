@@ -44,13 +44,14 @@ class ClassTable:
         return self.index.get(code[: self.depth])
 
 
-def _check_never(never: frozenset[str]) -> None:
-    letters = isinstance(never, frozenset) and all(
-        isinstance(c, str) and len(c) == 1 and "A" <= c <= "Z" for c in never
-    )
-    if not letters:
-        msg = "never must be a frozenset of upper-case ASCII letters"
+def _check_never(never: Iterable[str]) -> frozenset[str]:
+    letters = None if isinstance(never, str) else frozenset(never)
+    if letters is None or not all(
+        isinstance(c, str) and len(c) == 1 and "A" <= c <= "Z" for c in letters
+    ):
+        msg = "never must be an iterable of upper-case ASCII letters, not a str"
         raise TypeError(msg)
+    return letters
 
 
 @dataclass(frozen=True)
@@ -69,16 +70,16 @@ class Scheme:
         self,
         *entries: ClassEntry,
         aspects: Iterable[Aspect] = (),
-        never: frozenset[str] = frozenset(),
+        never: Iterable[str] = (),
     ) -> Scheme:
         """A new scheme with `entries` overlaid by code (later wins) and `aspects` turned on.
 
-        `never` bars further letters on top of the scheme's own; none is ever lifted.
+        `never`: any iterable of A-Z letters (not a str) barred on top of the scheme's own.
         """
-        _check_never(never)
+        barred = _check_never(never)
         merged = {entry.code: entry for entry in (*self.classes.entries, *entries)}
         table = replace(self.classes, entries=tuple(merged.values()))
-        letters = replace(self.letters, never=self.letters.never | never)
+        letters = replace(self.letters, never=self.letters.never | barred)
         return replace(
             self, aspects=self.aspects | frozenset(aspects), letters=letters, classes=table
         )

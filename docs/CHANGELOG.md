@@ -8,7 +8,7 @@ Every change to the public surface gets a line under Unreleased until the releas
 ## 0.2.0 (2026-10-23)
 
 - Add `lowest_free(taken, reserved=(), *, first=1)`: the lowest free number over plain ints.
-- `Scheme.extend` takes `never`: letters barred in addition to the scheme's own.
+- `Scheme.extend` takes `never`: letters barred in addition to the scheme's own, as any iterable of A-Z letters (a bare `str` is a `TypeError`).
 
 ## 0.1.0 (2026-10-22)
 
