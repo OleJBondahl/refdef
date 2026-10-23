@@ -6,6 +6,7 @@ Every change to the public surface gets a line under Unreleased until the releas
 ## Unreleased
 
 - Add `lowest_free(taken, reserved=(), *, first=1)`: the lowest free number over plain ints.
+- `Scheme.extend` takes `never`: letters barred in addition to the scheme's own.
 
 ## 0.1.0 (2026-10-22)
 

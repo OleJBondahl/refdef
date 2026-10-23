@@ -58,7 +58,7 @@ Size: the access size of a direct PLC address (refdef.plc): none, bit, byte, wor
 Address: a direct PLC address printed %IX0.0, %QW4 or %I* (refdef.plc); as_bit() adds the bit size to a size-less dotted address.
 ChannelTag: a terminal with an optional address (refdef.plc), printed as the terminal alone.
 parse_address: reads a direct PLC address (refdef.plc), repairing outer whitespace and leading zeros with an issue each; text that is not one gives None and a NOT_ADDRESS issue.
-Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes and aspects.
+Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes, aspects and further barred letters (never).
 ClassEntry: one class code with its title, the typical device of the class.
 STANDARD: the shipped scheme (function, product and location on, one to three letters without I and O, the versioned standard class table).
 check: tests designations against a scheme and returns an issue for each finding, in order; it reads nothing but its scheme argument.

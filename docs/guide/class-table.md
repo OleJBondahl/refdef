@@ -25,3 +25,11 @@ P = Aspect.PRODUCT
 print(check([parse("-J1", bare=P).value], j))   # ()
 print([i.code.value for i in check([parse("-J1", bare=P).value], STANDARD)])   # ['unknown_class']
 ```
+
+`never` bars further letters on top of the scheme's own: the new set is the union, so `I` and `O`
+stay barred and `extend` never lifts a letter.
+
+```python
+strict = STANDARD.extend(never=frozenset("A"))
+print([i.code.value for i in check([parse("-A1", bare=P).value], strict)])   # ['never_letter', 'unknown_class']
+```

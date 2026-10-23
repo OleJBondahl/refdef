@@ -139,6 +139,51 @@ def test_r5_check_reads_the_scheme_it_is_given():
     assert _codes("-J1") == ["unknown_class"]
 
 
+def _never_codes(scheme, text="-A1"):
+    value = parse(text, bare=P).value
+    assert isinstance(value, Designation)
+    return [i.code for i in check([value], scheme)]
+
+
+def test_r5_extend_never_bars_a_further_letter():
+    """R5: `extend(never=)` makes `check` report the letter; STANDARD does not."""
+    strict = STANDARD.extend(never=frozenset("A"))
+    assert IssueCode.NEVER_LETTER in _never_codes(strict)
+    assert IssueCode.NEVER_LETTER not in _never_codes(STANDARD)
+
+
+def test_r5_extend_never_is_a_union_and_leaves_the_scheme_alone():
+    """R5: I and O stay barred, A is added, and the scheme extended is unchanged."""
+    strict = STANDARD.extend(never=frozenset("A"))
+    assert strict.letters.never == frozenset("IOA")
+    assert strict.letters.min_count == STANDARD.letters.min_count
+    assert strict.letters.max_count == STANDARD.letters.max_count
+    assert STANDARD.letters.never == frozenset("IO")
+    assert IssueCode.NEVER_LETTER in _never_codes(strict, "-I1")
+
+
+def test_r5_extend_never_composes_with_entries_and_aspects():
+    """R5: entries and aspects overlay as before when `never` is also given."""
+    scheme = STANDARD.extend(
+        ClassEntry("J", "board connector"), aspects=(Aspect.TYPE,), never=frozenset("A")
+    )
+    assert Aspect.TYPE in scheme.aspects
+    assert scheme.classes.get("J") == ClassEntry("J", "board connector")
+    assert scheme.letters.never == frozenset("IOA")
+
+
+def test_r5_extend_default_never_keeps_the_letter_rule():
+    """R5: no `never` gives the same letter rule."""
+    assert STANDARD.extend().letters == STANDARD.letters
+
+
+@pytest.mark.parametrize("never", ["A", frozenset({"a"}), frozenset({"AB"}), frozenset({1}), {"A"}])
+def test_r5_extend_never_refuses_anything_but_a_frozenset_of_capital_letters(never):
+    """R5: a `never` that is not a frozenset of single A-Z letters is a TypeError."""
+    with pytest.raises(TypeError):
+        STANDARD.extend(never=never)
+
+
 def test_r5_check_type_errors():
     """R5: a non-Scheme scheme or a non-Designation item is a TypeError, not an issue."""
     with pytest.raises(TypeError):
