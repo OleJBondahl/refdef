@@ -44,4 +44,10 @@ def test_a_missing_name_and_a_changed_rule_are_found():
     assert missing_names("parse: x\nSize: y\n", [("m", "parse"), ("m", "Memory")]) == ["m.Memory"]
     rules = "- **R1. Title.** Body one. GATE: x\n- **R2. Other.** Body two.\n"
     assert missing_rules("R1. Body one.\nR2. Body 2.\n", rules) == ["R2"]
-    assert len(RULE.findall(_read("RULES.md"))) == 12
+
+
+def test_every_rule_heading_parses_and_the_ids_run_from_one():
+    rules = _read("RULES.md")
+    ids = [rid for rid, _ in RULE.findall(rules)]
+    assert len(ids) == len(re.findall(r"^- \*\*R\d+", rules, re.M))
+    assert ids == [f"R{n}" for n in range(1, len(ids) + 1)]
