@@ -7,6 +7,11 @@ class Aspect
 class ClassEntry(code: 'str', title: 'str') -> 'None'
     One class code with its title, the typical device of the class.
 
+class ClassTable(name: 'str', version: 'str', depth: 'int', entries: 'tuple[ClassEntry, ...]') -> 'None'
+    Versioned class entries; `depth` is how many leading letters of a code are looked up.
+
+    A caller passes its own table to a custom Scheme; `version` names the table, not the library.
+
 class Designation(levels: 'tuple[Level, ...]' = (), top: 'str' = '') -> 'None'
     A tuple of levels and an optional top node, built by the constructor and `child` only.
 
@@ -17,6 +22,11 @@ class Issue(code: 'IssueCode', subject: 'str', message: 'str') -> 'None'
 
 class IssueCode
     The 21 issue codes: the first 16 come from the readers, the last 5 from check.
+
+class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'})) -> 'None'
+    How many letters a code has and which letters never appear.
+
+    A caller builds a custom Scheme with it; `Scheme.extend` checks that `never` holds A-Z letters.
 
 class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, label: 'str' = '') -> 'None'
     One step in a tree: letters and a number (`-K2`), a number alone (`+3`) or a label (`+ER`).

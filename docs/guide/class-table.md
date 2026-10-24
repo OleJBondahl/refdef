@@ -33,3 +33,12 @@ stay barred and `extend` never lifts a letter. Any iterable of letters works; a 
 strict = STANDARD.extend(never={"A"})
 print([i.code.value for i in check([parse("-A1", bare=P).value], strict)])   # ['never_letter', 'unknown_class']
 ```
+
+A caller who builds its own scheme passes its own `ClassTable` and `LetterRule`, both public from `refdef`.
+
+```python
+from refdef import Aspect, ClassEntry, ClassTable, LetterRule, Scheme
+table = ClassTable(name="plant", version="1", depth=1, entries=(ClassEntry("A", "valve"),))
+mine = Scheme("plant", frozenset({Aspect.PRODUCT}), LetterRule(1, 2, frozenset("IO")), table)
+print(mine.classes.get("AB").title)   # valve
+```

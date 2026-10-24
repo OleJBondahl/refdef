@@ -60,5 +60,7 @@ ChannelTag: a terminal with an optional address (refdef.plc), printed as the ter
 parse_address: reads a direct PLC address (refdef.plc), repairing outer whitespace and leading zeros with an issue each; text that is not one gives None and a NOT_ADDRESS issue.
 Scheme: what check tests against: the aspects that are on, a letter rule and a class table; extend returns a new scheme with project classes, aspects and further barred letters (never: any iterable of A-Z letters, not a str).
 ClassEntry: one class code with its title, the typical device of the class.
+ClassTable: versioned class entries with the lookup depth; get(code) returns the entry or None.
+LetterRule: how many letters a code has and which letters never appear.
 STANDARD: the shipped scheme (function, product and location on, one to three letters without I and O, the versioned standard class table).
 check: tests designations against a scheme and returns an issue for each finding, in order; it reads nothing but its scheme argument.

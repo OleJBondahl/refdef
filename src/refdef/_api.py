@@ -9,9 +9,24 @@ import inspect
 DOORS: tuple[str, ...] = ("refdef", "refdef.plc")
 
 
+class _SortedSet:
+    """A set default whose repr lists its members sorted, so the hash seed never shows."""
+
+    def __init__(self, members: frozenset[object]) -> None:
+        self.text = "frozenset({" + ", ".join(repr(m) for m in sorted(members, key=repr)) + "})"
+
+    def __repr__(self) -> str:
+        return self.text
+
+
 def _signature(obj: object) -> str:
     """The signature as source text, so 3.14 and 3.15 print the same bytes."""
-    return str(inspect.signature(obj, annotation_format=annotationlib.Format.STRING))  # ty: ignore[invalid-argument-type] - obj is callable here
+    sig = inspect.signature(obj, annotation_format=annotationlib.Format.STRING)  # ty: ignore[invalid-argument-type] - obj is callable here
+    params = [
+        p.replace(default=_SortedSet(p.default)) if isinstance(p.default, frozenset) else p
+        for p in sig.parameters.values()
+    ]
+    return str(sig.replace(parameters=params))
 
 
 def _head(name: str, obj: object) -> str:

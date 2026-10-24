@@ -10,7 +10,10 @@ from refdef.tables import standard as _standard
 
 @dataclass(frozen=True)
 class LetterRule:
-    """How many letters a code has and which letters never appear."""
+    """How many letters a code has and which letters never appear.
+
+    A caller builds a custom Scheme with it; `Scheme.extend` checks that `never` holds A-Z letters.
+    """
 
     min_count: int = 1
     max_count: int = 3
@@ -27,7 +30,10 @@ class ClassEntry:
 
 @dataclass(frozen=True)
 class ClassTable:
-    """Versioned class entries; `depth` is how many leading letters of a code are looked up."""
+    """Versioned class entries; `depth` is how many leading letters of a code are looked up.
+
+    A caller passes its own table to a custom Scheme; `version` names the table, not the library.
+    """
 
     name: str
     version: str

@@ -5,6 +5,8 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- Export `LetterRule` and `ClassTable` from `refdef`.
+
 ## 0.2.0 (2026-10-23)
 
 - Add `lowest_free(taken, reserved=(), *, first=1)`: the lowest free number over plain ints.

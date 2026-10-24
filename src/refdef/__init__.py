@@ -8,16 +8,18 @@ from refdef.issues import Issue, IssueCode, Parsed
 from refdef.level import Aspect, Level
 from refdef.numbering import allocate, lowest_free, number_group
 from refdef.order import natural_key, sort_key
-from refdef.scheme import STANDARD, ClassEntry, Scheme
+from refdef.scheme import STANDARD, ClassEntry, ClassTable, LetterRule, Scheme
 from refdef.terminal import Signal, Terminal
 
 __all__ = [
     "STANDARD",
     "Aspect",
     "ClassEntry",
+    "ClassTable",
     "Designation",
     "Issue",
     "IssueCode",
+    "LetterRule",
     "Level",
     "Parsed",
     "Scheme",
