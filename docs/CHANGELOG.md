@@ -5,6 +5,8 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+## 0.3.0 (2026-10-24)
+
 - Export `LetterRule` and `ClassTable` from `refdef`.
 
 ## 0.2.0 (2026-10-23)

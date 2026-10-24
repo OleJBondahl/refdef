@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "refdef"
-version = "0.2.0"
+version = "0.3.0"
 description = "Reference designations as strict, typed, immutable Python values: parse, check, print, number and order"
 readme = "README.md"
 requires-python = ">=3.14"
