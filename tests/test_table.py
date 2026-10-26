@@ -1,4 +1,4 @@
-"""R5, R10 and the shipped table: shape of the 183 entries, lookup by `code[:depth]`, `extend`."""
+"""R5, R10 and the shipped table: shape of the 184 entries, lookup by `code[:depth]`, `extend`."""
 
 import re
 from pathlib import Path
@@ -7,7 +7,7 @@ import family
 import pytest
 from test_wording import check_wording
 
-from refdef import STANDARD, Aspect, ClassEntry
+from refdef import STANDARD, Aspect, ClassEntry, Designation, check, parse, render
 from refdef.scheme import ClassTable
 
 ENTRIES = STANDARD.classes.entries
@@ -16,10 +16,18 @@ PAIRS = [e for e in ENTRIES if len(e.code) == 2]
 
 
 def test_table_counts():
-    """R10: 17 main letters and 166 two-letter codes, nothing else."""
-    assert len(MAINS) == 17
+    """R10: 18 main letters and 166 two-letter codes, nothing else."""
+    assert len(MAINS) == 18
     assert len(PAIRS) == 166
     assert len(ENTRIES) == len(MAINS) + len(PAIRS)
+
+
+def test_class_a_parses_checks_and_renders():
+    """R10: class A (assemblies and controllers) is in the table; `-A4` parses and checks clean."""
+    value = parse("-A4", bare=Aspect.PRODUCT).value
+    assert isinstance(value, Designation)
+    assert check([value], STANDARD) == ()
+    assert render(value) == "-A4"
 
 
 def test_table_codes_are_unique_capitals():
@@ -77,10 +85,10 @@ def test_extend_later_wins_and_first_position_is_kept():
     """R5: an entry overlaid by code replaces the old one in its place; new codes go last."""
     scheme = STANDARD.extend(ClassEntry("B", "Own title"), ClassEntry("J", "board connector"))
     entries = scheme.classes.entries
-    assert entries[0] == ClassEntry("B", "Own title")
+    assert entries[1] == ClassEntry("B", "Own title")
     assert entries[-1] == ClassEntry("J", "board connector")
     assert len(entries) == len(ENTRIES) + 1
-    assert [e.code for e in entries[1:-1]] == [e.code for e in ENTRIES[1:]]
+    assert [e.code for e in entries[:-1]] == [e.code for e in ENTRIES]
 
 
 def test_extend_returns_a_new_scheme_and_leaves_standard_alone():

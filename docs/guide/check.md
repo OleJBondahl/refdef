@@ -15,7 +15,7 @@ A code is looked up by its first two letters, so `-KEB1` passes because `KE` is 
 The five codes are `aspect_off`, `letter_count`, `never_letter`, `unknown_class` and `duplicate`.
 
 ```python
-two = [parse("-A1", bare=P).value, parse("-A1", bare=P).value]
+two = [parse("-J1", bare=P).value, parse("-J1", bare=P).value]
 print([i.code.value for i in check(two, STANDARD)])   # ['unknown_class', 'duplicate', 'unknown_class']
 print([i.code.value for i in check([parse("%T1", bare=P).value], STANDARD)])   # ['aspect_off']
 print([i.code.value for i in check([parse("-KI1", bare=P).value], STANDARD)])  # ['never_letter', 'unknown_class']

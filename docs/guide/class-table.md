@@ -6,7 +6,7 @@ version, independent of the library version, and the changelog names each moved 
 
 ```python
 from refdef import STANDARD
-print(STANDARD.classes.version, STANDARD.classes.depth)   # 1 2
+print(STANDARD.classes.version, STANDARD.classes.depth)   # 2 2
 print(STANDARD.classes.get("KEB").code)   # KE
 print(STANDARD.classes.get("KX"))   # None
 ```
@@ -31,7 +31,7 @@ stay barred and `extend` never lifts a letter. Any iterable of letters works; a 
 
 ```python
 strict = STANDARD.extend(never={"A"})
-print([i.code.value for i in check([parse("-A1", bare=P).value], strict)])   # ['never_letter', 'unknown_class']
+print([i.code.value for i in check([parse("-A1", bare=P).value], strict)])   # ['never_letter']
 ```
 
 A caller who builds its own scheme passes its own `ClassTable` and `LetterRule`, both public from `refdef`.

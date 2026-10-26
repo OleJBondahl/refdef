@@ -1,7 +1,7 @@
 """Generate the class table module from a CSV with columns code, parent, title (why is ignored).
 
-Usage (from the repository root):
-    uv run python scripts/gen_table.py INPUT OUTPUT --version V
+Usage (from the repository root), the tracked source being scripts/classes.csv:
+    uv run python scripts/gen_table.py scripts/classes.csv src/refdef/tables/standard.py --version V
 """
 
 import argparse

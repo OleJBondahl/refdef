@@ -26,8 +26,8 @@ def test_s16_keb_passes_at_depth_two():
 
 
 def test_s19_duplicate_designation():
-    """R5: `-A1 -A1` gives unknown_class, duplicate, unknown_class (A is no class)."""
-    assert _codes("-A1", "-A1") == [
+    """R5: `-J1 -J1` gives unknown_class, duplicate, unknown_class (J is no class)."""
+    assert _codes("-J1", "-J1") == [
         IssueCode.UNKNOWN_CLASS,
         IssueCode.DUPLICATE,
         IssueCode.UNKNOWN_CLASS,

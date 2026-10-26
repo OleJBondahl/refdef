@@ -34,5 +34,5 @@ def test_r10_version_line_is_the_tables_own():
         standard.VERSION,
         standard.DEPTH,
     )
-    assert table.version == "1"
+    assert table.version == "2"
     assert tuple((e.code, e.title) for e in table.entries) == standard.ENTRIES

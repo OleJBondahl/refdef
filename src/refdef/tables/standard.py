@@ -2,9 +2,10 @@
 """The generated class table."""
 
 NAME = "standard"
-VERSION = "1"
+VERSION = "2"
 DEPTH = 2
 ENTRIES: tuple[tuple[str, str], ...] = (
+    ("A", "Assemblies and controllers"),
     ("B", "Sensors"),
     ("BA", "Voltage sensor"),
     ("BB", "Resistivity sensor"),
@@ -189,4 +190,4 @@ ENTRIES: tuple[tuple[str, str], ...] = (
     ("XT", "Openings"),
     ("XZ", "Multi-connector"),
 )
-ENTRIES_SHA256 = "dfe380f087194b2f27565793153c2d3c96f1e9161b68d23e942a7b27a69a51d6"
+ENTRIES_SHA256 = "11d47bdc622d6458269c85ee415e1fae65641beca1bb0b49237d654402787023"
