@@ -5,6 +5,9 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- Class A (items with two or more purposes, such as assemblies and controllers) is in the standard table.
+- Class table version 2: adds class A; the table source is `scripts/classes.csv`.
+
 ## 0.3.0 (2026-10-24)
 
 - Export `LetterRule` and `ClassTable` from `refdef`.
