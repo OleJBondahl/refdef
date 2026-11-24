@@ -35,6 +35,11 @@ class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, lab
 
     Letters are upper case and need a number; a label is never code-shaped. Else TypeError.
 
+NaturalKey(runs: 'tuple[tuple[int, int, str] | tuple[int, str], ...]', text: 'str')
+    The key `natural_key` returns: one key per digit or text run, then the raw text.
+
+    It is a plain tuple, so keys compare and sort as before; `runs` and `text` name its two parts.
+
 class Parsed(value: 'T', issues: 'tuple[Issue, ...]') -> 'None'
     A value read from text together with the issues the reader found.
 
@@ -73,7 +78,7 @@ lowest_free(taken: 'Collection[int]', reserved: 'Collection[int]' = (), *, first
 
     `reserved` is never handed out; the caller stores it. `first` below 1 is a TypeError.
 
-natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'NaturalKey'
     A sort key: digit runs by value, text runs as text, numbers first, then the raw text.
 
 number_group(aspect: 'Aspect', codes: 'Sequence[str]', taken: 'Collection[Level]' = (), reserved: 'Collection[Level]' = ()) -> 'tuple[Level, ...]'

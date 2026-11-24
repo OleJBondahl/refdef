@@ -2,11 +2,14 @@
 
 import inspect
 import random
+import re
 from typing import cast
 
+import family
+import fuzz
 import pytest
 
-from refdef import Aspect, Designation, Level, natural_key, parse, sort_key
+from refdef import Aspect, Designation, Level, NaturalKey, natural_key, parse, sort_key
 
 F, P, L = Aspect.FUNCTION, Aspect.PRODUCT, Aspect.LOCATION
 
@@ -124,3 +127,35 @@ def test_sort_key_is_a_total_order_consistent_with_natural_key():
         if key[a] <= key[b] <= key[c]:
             assert key[a] <= key[c]
         assert (key[a] < key[b]) == (natural_key(a) < natural_key(b))
+
+
+def _old_key(text, case_sensitive):
+    """The key `natural_key` returned before `NaturalKey`: plain nested tuples."""
+    runs = []
+    for run in re.findall(r"[0-9]+|[^0-9]+", text):
+        if run.isascii() and run.isdigit():
+            significant = run.lstrip("0")
+            runs.append((0, len(significant), significant))
+        else:
+            runs.append((1, run if case_sensitive else run.lower()))
+    return (tuple(runs), text)
+
+
+def _corpus():
+    lines = (family.ROOT / "tests" / "corpus" / "strings.txt").read_text("utf-8").splitlines()
+    return [*lines, *fuzz.hostile_texts(random.Random(7)), "W2", "W10", "X01", "X1", "b", "C", ""]
+
+
+@pytest.mark.parametrize("case_sensitive", [True, False])
+def test_natural_key_is_a_naturalkey_equal_to_the_old_tuple_and_sorts_alike(case_sensitive):
+    """R3: `natural_key` returns a `NaturalKey` that equals the former tuple, so every order is the same."""
+    texts = _corpus()
+    new = [natural_key(t, case_sensitive=case_sensitive) for t in texts]
+    old = [_old_key(t, case_sensitive) for t in texts]
+    assert all(
+        isinstance(k, NaturalKey) and k == o and k.text == t
+        for k, o, t in zip(new, old, texts, strict=True)
+    )
+    by_new = sorted(range(len(texts)), key=lambda i: new[i])
+    by_old = sorted(range(len(texts)), key=lambda i: old[i])
+    assert by_new == by_old

@@ -5,6 +5,7 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- `NaturalKey`: the type `natural_key` returns (a tuple of the run keys and the raw text) instead of `tuple[Any, ...]`; keys compare and sort exactly as before.
 - `Scheme.sign_characters()`: the signs of the aspects that are on, joined in aspect order (`=-+` for `STANDARD`).
 - `render(..., sign=)`: a given string replaces every sign between levels and drops the leading one, so `=A1+C1-K1` prints `A1-C1-K1` with `sign="-"`. It must be non-empty, without whitespace or a path separator.
 - `LetterRule.reserved` and `Scheme.extend(reserved=)`: letters a code should not start with. `check` reports one as the new advisory `IssueCode.RESERVED_LETTER`, which never refuses a designation; `STANDARD` reserves none.
