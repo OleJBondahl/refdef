@@ -314,3 +314,13 @@ def test_r6_hook_rejects_a_code_outside_issuecode(monkeypatch):
     Issue(IssueCode.EMPTY, "", "")
     assert seen == [IssueCode.EMPTY]
     issue_hook.assert_codes(seen)
+
+
+def test_r5_sign_characters_follow_the_aspects_on_in_aspect_order():
+    """R5: `sign_characters()` joins the signs of the aspects that are on, in enum order."""
+    assert STANDARD.sign_characters() == "=-+"
+    wide = STANDARD.extend(aspects=(Aspect.SITE, Aspect.TYPE))
+    assert wide.sign_characters() == "=-+%++"
+    only_product = dataclasses.replace(STANDARD, aspects=frozenset({P}))
+    assert only_product.sign_characters() == "-"
+    assert dataclasses.replace(STANDARD, aspects=frozenset()).sign_characters() == ""

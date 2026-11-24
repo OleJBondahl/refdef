@@ -73,6 +73,10 @@ class Scheme:
     letters: LetterRule
     classes: ClassTable
 
+    def sign_characters(self) -> str:
+        """The signs of the aspects that are on, joined in aspect order: `=-+` for `STANDARD`."""
+        return "".join(a.value for a in Aspect if a in self.aspects)
+
     def extend(
         self,
         *entries: ClassEntry,

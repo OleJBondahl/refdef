@@ -14,6 +14,14 @@ print(STANDARD.classes.get("KX"))   # None
 `get` looks up the first `depth` letters of a code and never falls back to a shorter prefix, so
 `KX` is unknown although `K` is a class.
 
+`sign_characters()` gives the signs of the aspects that are on, joined in aspect order.
+
+```python
+from refdef import Aspect
+print(STANDARD.sign_characters())                          # =-+
+print(STANDARD.extend(aspects=[Aspect.TYPE]).sign_characters())   # =-+%
+```
+
 A project adds its own classes, or turns on more aspects, with `extend`. It returns a new scheme
 and leaves `STANDARD` alone; an entry with a known code replaces the old one.
 
