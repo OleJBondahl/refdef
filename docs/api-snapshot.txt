@@ -84,10 +84,11 @@ parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal
 
     `bare` is the aspect of text before the first sign. Never raises for content.
 
-render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False) -> 'str'
-    Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
+render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False, sign: 'str | None' = None) -> 'str'
+    Print a designation; `pad`, `dotted`, `bare` and `sign` are the explicit dialects.
 
-    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign;
+    `sign="-"` prints each sign as `-` and omits the first: `A1-C1-K1`.
 
 sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
     A sort key: per level the rank of its aspect in `aspects` and its natural key.

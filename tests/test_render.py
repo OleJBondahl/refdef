@@ -33,7 +33,7 @@ VALUES = [
 def test_str_is_render_with_no_option(value):
     """R3: `str(v) == render(v)` and the explicit defaults change nothing."""
     assert str(value) == render(value)
-    assert render(value, pad=None, dotted=(), bare=False) == str(value)
+    assert render(value, pad=None, dotted=(), bare=False, sign=None) == str(value)
 
 
 def test_str_never_pads_dots_or_drops_a_sign():
@@ -157,3 +157,30 @@ def test_golden_lines_are_four_columns_led_by_strict_print():
         fields = golden.split("\t")
         assert len(fields) == 4, f"string {text!r}"
         assert fields[0] == text, f"strict print differs for string {text!r}"
+
+
+def test_sign_replaces_every_sign_and_drops_the_first():
+    """R3: `sign` prints the given separator between levels, from the levels, not by re-reading text."""
+    mixed = Designation((Level(Aspect.FUNCTION, "A", 1), Level(L, "C", 1), Level(P, "K", 1)))
+    assert str(mixed) == "=A1+C1-K1"
+    assert render(mixed, sign="-") == "A1-C1-K1"
+    assert render(mixed, sign="_") == "A1_C1_K1"
+    assert render(mixed, sign="--") == "A1--C1--K1"
+    assert render(Designation(mixed.levels, top="T"), sign="-") == "<T>A1-C1-K1"
+    assert (
+        render(Designation().child(P, "W", 25).child(P, number=1), sign="-", dotted=(P,)) == "W25.1"
+    )
+    assert render(Designation(), sign="-") == ""
+
+
+@pytest.mark.parametrize("bad", ["", " ", "a b", "/", "a\\b", "\n"])
+def test_sign_refuses_an_empty_or_unsafe_string(bad):
+    """R3: a sign with whitespace or a path separator, or none, is a ValueError."""
+    with pytest.raises(ValueError, match="sign"):
+        render(_k1(), sign=bad)
+
+
+def test_sign_refuses_a_non_str():
+    """R3: a sign that is not a str or None is a TypeError."""
+    with pytest.raises(TypeError, match="sign"):
+        render(_k1(), sign=1)  # ty: ignore[invalid-argument-type] - a malformed call on purpose
