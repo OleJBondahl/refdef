@@ -62,8 +62,7 @@ def render(
 ) -> str:
     """Print a designation; `pad`, `dotted`, `bare` and `sign` are the explicit dialects.
 
-    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign;
-    `sign="-"` prints each sign as `-` and omits the first: `A1-C1-K1`.
+    `pad={"W": 4}`: `-W0001`; `dotted=(P,)`: `-W25.1`; `bare=True` omits the first sign; `sign="-"`: `A1-C1-K1`.
     """
     _check(d, pad, dotted, bare, sign)
     widths = pad or {}
