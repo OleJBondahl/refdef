@@ -5,6 +5,8 @@ Every change to the public surface gets a line under Unreleased until the releas
 
 ## Unreleased
 
+- `LetterRule.reserved` and `Scheme.extend(reserved=)`: letters a code should not start with. `check` reports one as the new advisory `IssueCode.RESERVED_LETTER`, which never refuses a designation; `STANDARD` reserves none.
+
 ## 0.3.1 (2026-10-26)
 
 - Class A (items with two or more purposes, such as assemblies and controllers) is in the standard table.

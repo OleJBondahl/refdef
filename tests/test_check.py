@@ -24,7 +24,7 @@ def test_r6_issue_fields():
 
 
 def test_r6_issue_code_members():
-    """R6: IssueCode declares the 21 codes in order, parse family first."""
+    """R6: IssueCode declares the 22 codes in order, parse family first."""
     names = [member.name for member in IssueCode]
     assert names == [
         "EMPTY",
@@ -48,6 +48,7 @@ def test_r6_issue_code_members():
         "NEVER_LETTER",
         "UNKNOWN_CLASS",
         "DUPLICATE",
+        "RESERVED_LETTER",
     ]
 
 
@@ -74,7 +75,14 @@ def test_r6_parsed_shape():
 
 
 P, F, L = Aspect.PRODUCT, Aspect.FUNCTION, Aspect.LOCATION
-CHECK_FAMILY = ("aspect_off", "letter_count", "never_letter", "unknown_class", "duplicate")
+CHECK_FAMILY = (
+    "aspect_off",
+    "letter_count",
+    "never_letter",
+    "unknown_class",
+    "duplicate",
+    "reserved_letter",
+)
 
 
 def _codes(*texts: str) -> list[str]:
@@ -101,12 +109,12 @@ def test_r5_one_case_per_check_code(texts, expected):
 
 
 def test_r5_every_check_code_has_a_case():
-    """R5: the cases above cover the five check-family codes of IssueCode."""
+    """R5: the cases above and the reserved case cover the six check-family codes of IssueCode."""
     covered = {
         c for t in (("%T1",), ("-KEBX1",), ("-K1", "-K1"), ("-KX1",), ("-KI1",)) for c in _codes(*t)
-    }
+    } | {c.value for c in _never_codes(STANDARD.extend(reserved=frozenset("DL")), "-D1")}
     assert set(CHECK_FAMILY) <= covered
-    assert [m.value for m in IssueCode][-5:] == list(CHECK_FAMILY)
+    assert [m.value for m in IssueCode][-6:] == list(CHECK_FAMILY)
 
 
 def test_r5_letter_count_below_the_minimum():
@@ -150,6 +158,25 @@ def test_r5_extend_never_bars_a_further_letter():
     strict = STANDARD.extend(never=frozenset("A"))
     assert IssueCode.NEVER_LETTER in _never_codes(strict)
     assert IssueCode.NEVER_LETTER not in _never_codes(STANDARD)
+
+
+def test_r5_extend_reserved_advises_a_first_letter():
+    """R5: a reserved first letter gives RESERVED_LETTER and only that; STANDARD reserves none."""
+    soft = STANDARD.extend(reserved=frozenset("D"))
+    assert _never_codes(soft, "-D1") == [IssueCode.RESERVED_LETTER, IssueCode.UNKNOWN_CLASS]
+    assert _never_codes(soft, "-K1") == []
+    assert _never_codes(STANDARD, "-D1") == [IssueCode.UNKNOWN_CLASS]
+    assert STANDARD.letters.reserved == frozenset()
+    assert soft.letters.never == frozenset("IO")
+
+
+def test_r5_extend_reserved_is_checked_like_never():
+    """R5: `reserved` takes A-Z letters in any iterable, never a str, and is a union."""
+    for bad in ("D", ["d"], ["DL"], [1]):
+        with pytest.raises(TypeError):
+            STANDARD.extend(reserved=bad)  # ty: ignore[invalid-argument-type] - wrong type on purpose
+    twice = STANDARD.extend(reserved={"D"}).extend(reserved=("L",))
+    assert twice.letters.reserved == frozenset("DL")
 
 
 def test_r5_extend_never_is_a_union_and_leaves_the_scheme_alone():

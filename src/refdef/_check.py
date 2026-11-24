@@ -27,6 +27,10 @@ def _level_issues(level: Level, scheme: Scheme) -> list[Issue]:
         )
     if rule.never & set(level.code):
         found.append(Issue(IssueCode.NEVER_LETTER, subject, f"{level.code} uses a barred letter"))
+    if level.code[0] in rule.reserved:
+        found.append(
+            Issue(IssueCode.RESERVED_LETTER, subject, f"{level.code} starts with a reserved letter")
+        )
     if scheme.classes.get(level.code) is None:
         found.append(Issue(IssueCode.UNKNOWN_CLASS, subject, f"{level.code} is not a known class"))
     return found

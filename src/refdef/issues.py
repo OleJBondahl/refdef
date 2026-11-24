@@ -5,7 +5,10 @@ from enum import Enum
 
 
 class IssueCode(Enum):
-    """The 21 issue codes: the first 16 come from the readers, the last 5 from check."""
+    """The 22 issue codes: the first 16 come from the readers, the last 6 from check.
+
+    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses a designation.
+    """
 
     EMPTY = "empty"
     NO_SIGN = "no_sign"
@@ -28,6 +31,7 @@ class IssueCode(Enum):
     NEVER_LETTER = "never_letter"
     UNKNOWN_CLASS = "unknown_class"
     DUPLICATE = "duplicate"
+    RESERVED_LETTER = "reserved_letter"
 
 
 @dataclass(frozen=True)

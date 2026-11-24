@@ -21,12 +21,14 @@ class Issue(code: 'IssueCode', subject: 'str', message: 'str') -> 'None'
     One finding about a string or a designation: a code, the offending text, a short sentence.
 
 class IssueCode
-    The 21 issue codes: the first 16 come from the readers, the last 5 from check.
+    The 22 issue codes: the first 16 come from the readers, the last 6 from check.
 
-class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'})) -> 'None'
-    How many letters a code has and which letters never appear.
+    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses a designation.
 
-    A caller builds a custom Scheme with it; `Scheme.extend` checks that `never` holds A-Z letters.
+class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'}), reserved: 'frozenset[str]' = frozenset({})) -> 'None'
+    How many letters a code has, which letters never appear and which are only reserved.
+
+    `Scheme.extend` checks that `never` and `reserved` hold A-Z letters; reserved only advises.
 
 class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, label: 'str' = '') -> 'None'
     One step in a tree: letters and a number (`-K2`), a number alone (`+3`) or a label (`+ER`).
