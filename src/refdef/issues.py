@@ -7,7 +7,7 @@ from enum import Enum
 class IssueCode(Enum):
     """The 22 issue codes: the first 16 come from the readers, the last 6 from check.
 
-    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses a designation.
+    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses one.
     """
 
     EMPTY = "empty"

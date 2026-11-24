@@ -3,7 +3,7 @@
 This file holds one section per release of refdef, newest first.
 Every change to the public surface gets a line under Unreleased until the release is cut.
 
-## Unreleased
+## 0.4.0 (unreleased)
 
 - `NaturalKey`: the type `natural_key` returns (a tuple of the run keys and the raw text) instead of `tuple[Any, ...]`; keys compare and sort exactly as before.
 - `Scheme.sign_characters()`: the signs of the aspects that are on, joined in aspect order (`=-+` for `STANDARD`).

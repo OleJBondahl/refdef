@@ -16,11 +16,11 @@ class NaturalKey(NamedTuple):
     It is a plain tuple, so keys compare and sort as before; `runs` and `text` name its two parts.
     """
 
-    runs: tuple[tuple[int, int, str] | tuple[int, str], ...]
+    runs: tuple[tuple[Any, ...], ...]
     text: str
 
 
-def _run_key(run: str, *, case_sensitive: bool) -> tuple[int, int, str] | tuple[int, str]:
+def _run_key(run: str, *, case_sensitive: bool) -> tuple[Any, ...]:
     if run.isascii() and run.isdigit():
         significant = run.lstrip("0")
         # (length, digits) orders like int(run) and never hits the int-from-text digit limit

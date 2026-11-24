@@ -160,7 +160,7 @@ def test_golden_lines_are_four_columns_led_by_strict_print():
 
 
 def test_sign_replaces_every_sign_and_drops_the_first():
-    """R3: `sign` prints the given separator between levels, from the levels, not by re-reading text."""
+    """R3: `sign` prints the given separator between levels, never by re-reading the text."""
     mixed = Designation((Level(Aspect.FUNCTION, "A", 1), Level(L, "C", 1), Level(P, "K", 1)))
     assert str(mixed) == "=A1+C1-K1"
     assert render(mixed, sign="-") == "A1-C1-K1"

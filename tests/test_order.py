@@ -143,12 +143,12 @@ def _old_key(text, case_sensitive):
 
 def _corpus():
     lines = (family.ROOT / "tests" / "corpus" / "strings.txt").read_text("utf-8").splitlines()
-    return [*lines, *fuzz.hostile_texts(random.Random(7)), "W2", "W10", "X01", "X1", "b", "C", ""]
+    return [*lines, *fuzz.hostile_texts(random.Random(7)), "W2", "W10", "X01", "X1", "b", "C", ""]  # noqa: S311 - seeded test data
 
 
 @pytest.mark.parametrize("case_sensitive", [True, False])
 def test_natural_key_is_a_naturalkey_equal_to_the_old_tuple_and_sorts_alike(case_sensitive):
-    """R3: `natural_key` returns a `NaturalKey` that equals the former tuple, so every order is the same."""
+    """R3: `natural_key` returns a `NaturalKey` equal to the former tuple, so every order holds."""
     texts = _corpus()
     new = [natural_key(t, case_sensitive=case_sensitive) for t in texts]
     old = [_old_key(t, case_sensitive) for t in texts]

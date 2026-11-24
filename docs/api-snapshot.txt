@@ -23,7 +23,7 @@ class Issue(code: 'IssueCode', subject: 'str', message: 'str') -> 'None'
 class IssueCode
     The 22 issue codes: the first 16 come from the readers, the last 6 from check.
 
-    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses a designation.
+    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses one.
 
 class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'}), reserved: 'frozenset[str]' = frozenset({})) -> 'None'
     How many letters a code has, which letters never appear and which are only reserved.
@@ -35,7 +35,7 @@ class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, lab
 
     Letters are upper case and need a number; a label is never code-shaped. Else TypeError.
 
-NaturalKey(runs: 'tuple[tuple[int, int, str] | tuple[int, str], ...]', text: 'str')
+NaturalKey(runs: 'tuple[tuple[Any, ...], ...]', text: 'str')
     The key `natural_key` returns: one key per digit or text run, then the raw text.
 
     It is a plain tuple, so keys compare and sort as before; `runs` and `text` name its two parts.
@@ -92,7 +92,7 @@ parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal
 render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False, sign: 'str | None' = None) -> 'str'
     Print a designation; `pad`, `dotted`, `bare` and `sign` are the explicit dialects.
 
-    `pad={"W": 4}`: `-W0001`; `dotted=(P,)`: `-W25.1`; `bare=True` omits the first sign; `sign="-"`: `A1-C1-K1`.
+    `pad={"W": 4}`: `-W0001`; `dotted=(P,)`: `-W25.1`; `bare=True`: `U1-K3`; `sign="-"`: `A1-C1-K1`.
 
 sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
     A sort key: per level the rank of its aspect in `aspects` and its natural key.
