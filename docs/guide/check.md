@@ -12,7 +12,8 @@ print([i.code.value for i in check([parse("-KEB1", bare=P).value], STANDARD)])  
 ```
 
 A code is looked up by its first two letters, so `-KEB1` passes because `KE` is in the table.
-The five codes are `aspect_off`, `letter_count`, `never_letter`, `unknown_class` and `duplicate`.
+The six codes are `aspect_off`, `letter_count`, `never_letter`, `unknown_class`, `duplicate` and `reserved_letter`.
+The last is advisory: it never refuses a designation, and a caller may show it as a warning.
 
 ```python
 two = [parse("-J1", bare=P).value, parse("-J1", bare=P).value]

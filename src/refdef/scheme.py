@@ -10,14 +10,15 @@ from refdef.tables import standard as _standard
 
 @dataclass(frozen=True)
 class LetterRule:
-    """How many letters a code has and which letters never appear.
+    """How many letters a code has, which letters never appear and which are only reserved.
 
-    A caller builds a custom Scheme with it; `Scheme.extend` checks that `never` holds A-Z letters.
+    `Scheme.extend` checks that `never` and `reserved` hold A-Z letters; reserved only advises.
     """
 
     min_count: int = 1
     max_count: int = 3
     never: frozenset[str] = frozenset("IO")
+    reserved: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True)
@@ -50,12 +51,12 @@ class ClassTable:
         return self.index.get(code[: self.depth])
 
 
-def _check_never(never: Iterable[str]) -> frozenset[str]:
-    letters = None if isinstance(never, str) else frozenset(never)
+def _check_letters(name: str, given: Iterable[str]) -> frozenset[str]:
+    letters = None if isinstance(given, str) else frozenset(given)
     if letters is None or not all(
         isinstance(c, str) and len(c) == 1 and "A" <= c <= "Z" for c in letters
     ):
-        msg = "never must be an iterable of upper-case ASCII letters, not a str"
+        msg = f"{name} must be an iterable of upper-case ASCII letters, not a str"
         raise TypeError(msg)
     return letters
 
@@ -72,20 +73,30 @@ class Scheme:
     letters: LetterRule
     classes: ClassTable
 
+    def sign_characters(self) -> str:
+        """The signs of the aspects that are on, joined in aspect order: `=-+` for `STANDARD`."""
+        return "".join(a.value for a in Aspect if a in self.aspects)
+
     def extend(
         self,
         *entries: ClassEntry,
         aspects: Iterable[Aspect] = (),
         never: Iterable[str] = (),
+        reserved: Iterable[str] = (),
     ) -> Scheme:
         """A new scheme with `entries` overlaid by code (later wins) and `aspects` turned on.
 
-        `never`: any iterable of A-Z letters (not a str) barred on top of the scheme's own.
+        `never` and `reserved`: any iterable of A-Z letters (not a str), added to the scheme's own.
         """
-        barred = _check_never(never)
+        barred = _check_letters("never", never)
+        advised = _check_letters("reserved", reserved)
         merged = {entry.code: entry for entry in (*self.classes.entries, *entries)}
         table = replace(self.classes, entries=tuple(merged.values()))
-        letters = replace(self.letters, never=self.letters.never | barred)
+        letters = replace(
+            self.letters,
+            never=self.letters.never | barred,
+            reserved=self.letters.reserved | advised,
+        )
         return replace(
             self, aspects=self.aspects | frozenset(aspects), letters=letters, classes=table
         )

@@ -21,17 +21,24 @@ class Issue(code: 'IssueCode', subject: 'str', message: 'str') -> 'None'
     One finding about a string or a designation: a code, the offending text, a short sentence.
 
 class IssueCode
-    The 21 issue codes: the first 16 come from the readers, the last 5 from check.
+    The 22 issue codes: the first 16 come from the readers, the last 6 from check.
 
-class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'})) -> 'None'
-    How many letters a code has and which letters never appear.
+    `RESERVED_LETTER` is advisory: a caller may treat it as a warning; it never refuses one.
 
-    A caller builds a custom Scheme with it; `Scheme.extend` checks that `never` holds A-Z letters.
+class LetterRule(min_count: 'int' = 1, max_count: 'int' = 3, never: 'frozenset[str]' = frozenset({'I', 'O'}), reserved: 'frozenset[str]' = frozenset({})) -> 'None'
+    How many letters a code has, which letters never appear and which are only reserved.
+
+    `Scheme.extend` checks that `never` and `reserved` hold A-Z letters; reserved only advises.
 
 class Level(aspect: 'Aspect', code: 'str' = '', number: 'int | None' = None, label: 'str' = '') -> 'None'
     One step in a tree: letters and a number (`-K2`), a number alone (`+3`) or a label (`+ER`).
 
     Letters are upper case and need a number; a label is never code-shaped. Else TypeError.
+
+NaturalKey(runs: 'tuple[tuple[Any, ...], ...]', text: 'str')
+    The key `natural_key` returns: one key per digit or text run, then the raw text.
+
+    It is a plain tuple, so keys compare and sort as before; `runs` and `text` name its two parts.
 
 class Parsed(value: 'T', issues: 'tuple[Issue, ...]') -> 'None'
     A value read from text together with the issues the reader found.
@@ -71,7 +78,7 @@ lowest_free(taken: 'Collection[int]', reserved: 'Collection[int]' = (), *, first
 
     `reserved` is never handed out; the caller stores it. `first` below 1 is a TypeError.
 
-natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
+natural_key(text: 'str', *, case_sensitive: 'bool' = True) -> 'NaturalKey'
     A sort key: digit runs by value, text runs as text, numbers first, then the raw text.
 
 number_group(aspect: 'Aspect', codes: 'Sequence[str]', taken: 'Collection[Level]' = (), reserved: 'Collection[Level]' = ()) -> 'tuple[Level, ...]'
@@ -82,10 +89,10 @@ parse(text: 'str', *, bare: 'Aspect') -> 'Parsed[Designation | Terminal | Signal
 
     `bare` is the aspect of text before the first sign. Never raises for content.
 
-render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False) -> 'str'
-    Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
+render(d: 'Designation', *, pad: 'Mapping[str, int] | None' = None, dotted: 'Collection[Aspect]' = (), bare: 'bool' = False, sign: 'str | None' = None) -> 'str'
+    Print a designation; `pad`, `dotted`, `bare` and `sign` are the explicit dialects.
 
-    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+    `pad={"W": 4}`: `-W0001`; `dotted=(P,)`: `-W25.1`; `bare=True`: `U1-K3`; `sign="-"`: `A1-C1-K1`.
 
 sort_key(d: 'Designation', *, aspects: 'Sequence[Aspect]', case_sensitive: 'bool' = True) -> 'tuple[Any, ...]'
     A sort key: per level the rank of its aspect in `aspects` and its natural key.

@@ -6,7 +6,18 @@ from refdef.designation import Designation
 from refdef.level import Aspect, Level
 
 
-def _check(d: object, pad: object, dotted: object, bare: object) -> None:
+def _check_sign(sign: object) -> None:
+    if sign is None:
+        return
+    if not isinstance(sign, str):
+        msg = "sign must be a str or None"
+        raise TypeError(msg)
+    if not sign or any(c.isspace() or c in "/\\" for c in sign):
+        msg = "sign must be non-empty, with no whitespace and no path separator"
+        raise ValueError(msg)
+
+
+def _check(d: object, pad: object, dotted: object, bare: object, sign: object) -> None:
     if not isinstance(d, Designation):
         msg = "render takes a Designation"
         raise TypeError(msg)
@@ -22,6 +33,7 @@ def _check(d: object, pad: object, dotted: object, bare: object) -> None:
     if not isinstance(bare, bool):
         msg = "bare must be a bool"
         raise TypeError(msg)
+    _check_sign(sign)
 
 
 def _is_sub(level: Level, previous: Level | None) -> bool:
@@ -46,19 +58,22 @@ def render(
     pad: Mapping[str, int] | None = None,
     dotted: Collection[Aspect] = (),
     bare: bool = False,
+    sign: str | None = None,
 ) -> str:
-    """Print a designation; `pad`, `dotted` and `bare` are the explicit dialects, none is `str(d)`.
+    """Print a designation; `pad`, `dotted`, `bare` and `sign` are the explicit dialects.
 
-    `pad={"W": 4}` gives `-W0001`; `dotted=(P,)` gives `-W25.1`; `bare=True` omits the first sign.
+    `pad={"W": 4}`: `-W0001`; `dotted=(P,)`: `-W25.1`; `bare=True`: `U1-K3`; `sign="-"`: `A1-C1-K1`.
     """
-    _check(d, pad, dotted, bare)
+    _check(d, pad, dotted, bare, sign)
     widths = pad or {}
     out = [f"<{d.top}>"] if d.top else []
     previous = None
     for index, level in enumerate(d.levels):
-        sign = level.aspect.value
+        mark = level.aspect.value if sign is None else sign
         if _is_sub(level, previous) and level.aspect in dotted:
-            sign = "."
-        out.append(("" if bare and index == 0 else sign) + _text(level, widths))
+            mark = "."
+        out.append(
+            ("" if (bare or sign is not None) and index == 0 else mark) + _text(level, widths)
+        )
         previous = level
     return "".join(out)

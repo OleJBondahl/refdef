@@ -28,10 +28,10 @@ F16. An agent finds everything from one place: AGENTS.md in the repository and l
 F17. The library stands alone: no file in the repository names an application that uses it.
 R1. For every designation, terminal or signal value `v`, `parse(str(v), bare=a).value == v` for any aspect `a`, and for every string `s` that parses without an issue, `str(parse(s, bare=a).value) == s`.
 R2. A `Level` has upper-case letters with a number, a number alone, or a stripped non-empty label without `= - + % # : ; & < > .`; a number is an `int` from 1 to 999_999_999; a label is never shaped like a code (ASCII letters, then digits worth 1 to 999_999_999, such as `K1`, `k01` or `7`), because `-K1` must read back as a coded level (`K0` and `K1234567890` are labels); a `Designation.top` is empty or stripped, non-empty and without `> : ; &`; a `Terminal` has at least one pin, each stripped, non-empty and without `:`; a `Signal.name` is stripped and non-empty, and a `Signal.of` is `None` or a designation with at least one level or a top (an empty `Signal.of` is refused, because `;N` must read back to the same value); any other shape is malformed and raises `TypeError` at construction (F3).
-R3. `str()` prints every level with its sign and never pads, dots or drops a sign; every dialect (`pad`, `dotted`, `bare`) is an explicit `render` option, and a change to any printed form moves the golden.
+R3. `str()` prints every level with its sign and never pads, dots or drops a sign; every dialect (`pad`, `dotted`, `bare`, `sign`) is an explicit `render` option, and a change to any printed form moves the golden.
 R4. `parse` and `parse_address` return a value and an issue tuple for any string, every lenient repair (case, leading zero, dot, missing sign, free label, unsupported suffix) is matched by an issue with its code, and no default letter or number is ever substituted; a digit run that is zero or longer than nine digits (the bound of R2) reads as a label with an issue.
 R5. `parse` takes no scheme, every rule that needs one (aspect on, letter count, never-letters (`Scheme.extend(never=)` takes any iterable of single A-Z letters and refuses a bare `str`), unknown class by `code[:depth]`, duplicate) lives in `check`, and no function reads a scheme or table other than through its argument.
-R6. `Issue` has exactly these three fields, no severity, and `IssueCode` is a closed enum of exactly 21 codes that every emitted issue uses: the parse family (16) `EMPTY`, `NO_SIGN`, `EMPTY_LEVEL`, `EMPTY_TOP`, `WHITESPACE`, `LOWER_CASE`, `LEADING_ZERO`, `ZERO_NUMBER`, `NUMBER_TOO_LARGE`, `FREE_LABEL`, `BAD_LABEL`, `DOT_LEVEL`, `EMPTY_PIN`, `EMPTY_NAME`, `UNSUPPORTED_SUFFIX`, `NOT_ADDRESS` (the last only from `parse_address`), and the check family (5) `ASPECT_OFF`, `LETTER_COUNT`, `NEVER_LETTER`, `UNKNOWN_CLASS`, `DUPLICATE`; the values are the lower-case names.
+R6. `Issue` has exactly these three fields, no severity, and `IssueCode` is a closed enum of exactly 22 codes that every emitted issue uses: the parse family (16) `EMPTY`, `NO_SIGN`, `EMPTY_LEVEL`, `EMPTY_TOP`, `WHITESPACE`, `LOWER_CASE`, `LEADING_ZERO`, `ZERO_NUMBER`, `NUMBER_TOO_LARGE`, `FREE_LABEL`, `BAD_LABEL`, `DOT_LEVEL`, `EMPTY_PIN`, `EMPTY_NAME`, `UNSUPPORTED_SUFFIX`, `NOT_ADDRESS` (the last only from `parse_address`), and the check family (6) `ASPECT_OFF`, `LETTER_COUNT`, `NEVER_LETTER`, `UNKNOWN_CLASS`, `DUPLICATE`, `RESERVED_LETTER` (advisory: a caller may treat it as a warning); the values are the lower-case names.
 R7. `within`, `relative_to` (on `Designation`, `Terminal` and `Signal`) and `common` follow the rule in `DESIGN.md` exactly, and every argument is within `common(*ds)`.
 R8. `allocate` returns the lowest free number from `first` given `taken` and `reserved`, `lowest_free` does the same over plain ints, `number_group` equals `allocate` applied in sequence with each result added to `taken`, and refdef holds no numbering store.
 R9. `natural_key` orders digit runs by value and text runs as text, numbers before text, with the raw text as the last tie-break; `sort_key` is one `(aspect rank, natural_key(level.text))` pair per level, with the aspect order a required keyword and an unlisted aspect ranked after the listed ones in enum order.
@@ -44,13 +44,14 @@ Designation: frozen tuple of levels and an optional top; built by the constructo
 Terminal: a designation and its pins, printed of:pin:pin; pins are opaque text.
 Signal: a name on a designation or alone, printed of;name; the name is opaque text.
 Issue: a code, the offending text and a short message; no severity.
-IssueCode: the closed set of 21 issue codes; values are the lower-case names.
+IssueCode: the closed set of 22 issue codes; values are the lower-case names.
 Parsed: a value read from text together with its issues.
 parse: reads text leniently into a value and the issues of each repair, and never raises for content.
-render: the strict printer with the explicit options pad, dotted and bare.
+render: the strict printer with the explicit options pad, dotted, bare and sign.
 allocate: the lowest free number of a class given what is taken and reserved; stores nothing.
 lowest_free: the lowest free plain int from first given taken and reserved; stores nothing.
 number_group: levels for several codes, each numbered after the earlier ones; taken is not changed.
+NaturalKey: the key natural_key returns, a tuple of the run keys and the raw text.
 natural_key: a sort key with digit runs by value, numbers before text, ties on the raw text.
 sort_key: a designation's key, one pair per level; the aspect order is a required keyword.
 Memory: the memory area of a direct PLC address (refdef.plc): input, output or marker; the value is the letter.
